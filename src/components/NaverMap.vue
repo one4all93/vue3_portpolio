@@ -33,7 +33,12 @@ export default {
         console.log('NaverMap mounted map', this.map);
 
           // 지도 생성 완료 후 GeoJSON 로딩
-        fetch('/geojson/seoul.geojson')
+        fetch('/geojson/seoul.geojson',{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json; charset=UTF-8',
+            }
+        })
             .then(res => res.json())        // geojson 파일 읽은 후 => json 변환
             .then(data => {                 // json 변환된 데이터 를 data라는 이름으로 받음
                 //console.log('geojson data', data);

@@ -16,4 +16,4 @@ Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://
 
 < 2025.04. >
 - 열린데이터 광장 > 서울시 공공도서관 데이터.json example폴더에 추가 (일단 개발용으로 json파일 사용하고, api연계는 추후에 진행 예정**)
-- 
+- 서울시 구별 경계 파일로 표출테스트완료 :: 성북구가 빠져있어서 추구 성북구 추가 필요**
