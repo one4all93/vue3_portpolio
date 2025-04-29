@@ -1,8 +1,31 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue';
-import NaverMap from './components/NaverMap.vue';
-import Lnb from './components/Lnb.vue';
-import Main from './components/Main.vue';
+import { ref, onMounted } from 'vue';
+import { useFacilityStore } from '@/stores/useFacilityStore';
+// import HelloWorld from './components/HelloWorld.vue';
+// import NaverMap from './components/NaverMap.vue';
+import Lnb from '@/components/Lnb.vue';
+import Main from '@/components/Main.vue';
+
+//console.log('APP component setup');
+const facilitys = ref({
+  "서울공공도서관": [],
+  "서울공공체육시설": [],
+});  // 데이터의 변화를 감지하기 위해 ref를 사용*
+
+onMounted(() => {
+    //console.log('Composition API :: App component mounted');
+    /**
+     * 1. 서울 공공도서관 데이터 읽어와서 / json 변환 / facilitys에 담기
+     */
+    fetch("/example/seoul_public_lib.json")
+    .then(res => res.json())
+    .then(data => {
+        //console.log('facilitys', facilitys.value)
+        //console.log('Main component mounted data', data.DATA);
+        facilitys.value['서울공공도서관'].push(...data.DATA);
+        console.log('facilitys', facilitys.value);
+    });
+});
 </script>
 
 <template>
@@ -11,7 +34,7 @@ import Main from './components/Main.vue';
     <div id="layoutSidenav">  
       <div id="layoutSidenav_nav">
         <!-- Lnb :: 왼쪽 메뉴바 -->
-        <Lnb />
+        <Lnb :facilitys="facilitys"/>
       </div>
       <div id="layoutSidenav_content">
         <main>

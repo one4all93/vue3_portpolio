@@ -60,13 +60,15 @@
 </template>
 
 <script>
-import NaverMap from './NaverMap.vue';
+import { onMounted , ref } from 'vue';
+import NaverMap from '@/components/NaverMap.vue';
 
 export default {
     name: 'Main',
     components: {
         NaverMap,
     },
+    
 }
 </script>
 

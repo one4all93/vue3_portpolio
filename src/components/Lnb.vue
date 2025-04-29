@@ -8,16 +8,15 @@
                         <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                         Dashboard
                     </a> -->
-                    <div class="sb-sidenav-menu-heading">시설 항목</div>
+                    <!-- <div class="sb-sidenav-menu-heading"></div> -->
                     <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
                         <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                        Facility **
+                        시설 항목
                         <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                     </a>
                     <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                        <nav class="sb-sidenav-menu-nested nav">
-                            <a class="nav-link" href="layout-static.html">Static Navigation</a>
-                            <a class="nav-link" href="layout-sidenav-light.html">Light Sidenav</a>
+                        <nav class="sb-sidenav-menu-nested nav" v-for="(facName, index) in Object.keys(facilitys)" :key="index">
+                            <a class="nav-link" @click.prevent="clickLnb(facName)" href="javascript.void(0);">{{ facName }}</a>
                         </nav>
                     </div>
                     <!-- <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
@@ -70,10 +69,24 @@
     </div>
 </template>
 
-<script>
-export default {
-    name: 'Lnb',
+<script setup>    
+import { defineProps } from 'vue';
+import { useFacilityStore } from '@/stores/useFacilityStore';
 
+// props 정의
+// const facilitys = defineProps({
+//   facilitys: Object // 또는 정확한 타입 명시 (예: Record<string, any> 또는 특정 타입)
+// })
+const { facilitys } = defineProps(['facilitys']);
+//console.log('Lnb component setup', Object.keys(facilitys));
+
+const facilityStore = useFacilityStore();
+
+function clickLnb(facName) {
+    //console.log('Lnb component clickLnb', facName);
+    // 스토어에 값 업데이트
+    facilityStore.selectFacName(facName);
+    console.log('Lnb :: facilityStore.facilities',facilityStore.getFacName());
 }
 </script>
 

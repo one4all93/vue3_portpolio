@@ -2,7 +2,77 @@
     <div id="map" style="height: 150%; width: 100%;"></div> 
 </template>
 
-<script>
+<script setup>
+import { ref, computed, onMounted } from 'vue';
+import { useMapStore } from '@/stores/useMapStore';
+import { useFacilityStore } from '@/stores/useFacilityStore';
+
+import { useMapCtrl } from '@/utils/NaverMapCtrl'; // 지도 컨트롤러
+
+// 스토어
+const mapStore = useMapStore(); // 지도
+const facilityStore = useFacilityStore(); // 시설정보
+
+const mapCtrl = useMapCtrl(); // 지도 컨트롤러
+
+const map = ref(null);
+const lat = ref(37.570713);
+const lng = ref(126.978190);
+const zoom = ref(12);
+
+// GeoJSON 저장용
+const geojson = ref(null);
+
+// 지도 옵션 계산
+const mapOptions = computed(() => ({
+  center: new naver.maps.LatLng(lat.value, lng.value),
+  zoom: zoom.value
+}));
+
+// GeoJSON 그리기 함수
+function drawGeojson(geojsonData) {
+  if (!map.value) return;
+
+  map.value.data.addGeoJson(geojsonData);
+  map.value.data.setStyle((feature) => {
+    let color = 'red';
+    if (feature.getProperty('isColorful')) {
+      color = feature.getProperty('color');
+    }
+
+    return {
+      fillColor: color,
+      strokeColor: color,
+      strokeWeight: 2,
+      icon: null
+    };
+  });
+}
+
+// 지도 초기화 및 GeoJSON 로딩
+onMounted(() => {
+  console.log('NaverMap mounted');
+  map.value = new naver.maps.Map('map', mapOptions.value);
+  console.log('NaverMap mounted map', map.value);
+  // 스토어에 지도 저장
+  mapStore.setNaverMap(map.value);
+  mapCtrl.checkMap();
+
+  fetch('/geojson/seoul.geojson', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+    }
+  })
+    .then(res => res.json())
+    .then(data => {
+      geojson.value = data;
+      drawGeojson(data);
+    });
+});
+</script>
+
+<!-- <script>
 export default {
     name: 'NaverMap',
     data(){
@@ -13,11 +83,6 @@ export default {
             zoom : 12,
             geojson : null,
         }
-    },
-    created(){
-        console.log('NaverMap created');
-        //this.initMap();
-        // 37.564713 , 127.008190
     },
     computed: {
         mapOptions(){
@@ -46,19 +111,6 @@ export default {
                 this.drawGeojson(data);
         });
     },
-    // watch: {
-    //     map: {
-    //         handler(newVal, oldVal) {
-    //             console.log('map changed', newVal, oldVal);
-    //             // 우선 geojson 그려지는지 확인용 테스트
-    //             fetch('./geojson/seoul.geojson')
-    //             .then(res => res.json())
-    //             .then(data => { console.log('geojson data', data);
-    //                 this.drawGeoJSON(data);
-    //             });
-    //         },
-    //     }
-    // },
     methods: {
         // 지도 초기화 함수
         initMap() {
@@ -92,7 +144,7 @@ export default {
         }
     }
 }
-</script>
+</script> -->
 
 <style>
 

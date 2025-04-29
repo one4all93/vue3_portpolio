@@ -20,11 +20,27 @@ Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://
 
 < 2025.04.28~29 >
 - 템플렛 스타일 찾기 + css추가
-    - 왼쪽 메뉴 구성
-- 
+    - 왼쪽 메뉴 구성(Lnb)
+    - 서울공공도서관 데이터 불러오기
+    - 시설 항목 표출
+- 화면 구조 재조정 작업
+    - 컴포넌트 분리 작업
+    - Main
+        - NaverMap
+        - Chart*2
+        - DataList
+- pania 설치 및 설정 추가
+- useFacilityStore 추가
+- vite.config.js 에 '@' 패스 alias 추가
+
+< 2025.04.30 >
+- NaverMap.vue 지도 구현 방식 composition api로 변경
+- NaverMapCtrl.js 구성 :: 마커 표출 및 마커팝업 표출 **
+
 
 < 주요 작업 목록 >
 - 왼쪽 메뉴 구성 (2뎁스 이상) :: 클릭시, 해당 마커 및 데이터 표출
+    - 지도 레벨에 따른 마커 표출 :: 마커레벨 12보다 낮으면 지도영역에 선택된 시설갯수 직접 표출 :: 갯수에 따른 영역 색상 범주로 설정하기**
 - 데이터 차트화 (다른 영역에 왼쪽 메뉴 클릭 싱크 맞춰서 수치 및 조건 변하면 렌더링 다시 되게끔)
 - 구별 색상 다르게 입히기
 - 로딩상태 처리
