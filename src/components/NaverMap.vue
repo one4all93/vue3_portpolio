@@ -1,5 +1,5 @@
 <template>
-  <div id="map" style="width:1400px;height:1000px;"></div>
+    <div id="map" style="height: 150%; width: 100%;"></div> 
 </template>
 
 <script>
@@ -8,8 +8,8 @@ export default {
     data(){
         return{
             map : null,
-            lat : 37.569090,
-            lng : 126.980000,
+            lat : 37.570713,
+            lng : 126.978190,
             zoom : 12,
             geojson : null,
         }
@@ -17,6 +17,7 @@ export default {
     created(){
         console.log('NaverMap created');
         //this.initMap();
+        // 37.564713 , 127.008190
     },
     computed: {
         mapOptions(){
@@ -94,8 +95,5 @@ export default {
 </script>
 
 <style>
-    #map {
-    width: 100%;
-    height: 500px;
-    }
+
 </style>

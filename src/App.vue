@@ -1,19 +1,25 @@
 <script setup>
 import HelloWorld from './components/HelloWorld.vue';
 import NaverMap from './components/NaverMap.vue';
+import Lnb from './components/Lnb.vue';
+import Main from './components/Main.vue';
 </script>
 
 <template>
-  <!-- <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
-  </div> -->
   <!-- <HelloWorld msg="Vite + Vue" /> -->
-  <NaverMap />
+  <div class="sb-nav-fixed">
+    <div id="layoutSidenav">  
+      <div id="layoutSidenav_nav">
+        <!-- Lnb :: 왼쪽 메뉴바 -->
+        <Lnb />
+      </div>
+      <div id="layoutSidenav_content">
+        <main>
+          <Main />
+        </main>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped>
