@@ -6,6 +6,8 @@ import { useFacilityStore } from '@/stores/useFacilityStore';
 import Lnb from '@/components/Lnb.vue';
 import Main from '@/components/Main.vue';
 
+const facilityStore = useFacilityStore(); // 시설정보 스토어
+
 //console.log('APP component setup');
 const facilitys = ref({
   "서울공공도서관": [],
@@ -15,7 +17,7 @@ const facilitys = ref({
 onMounted(() => {
     //console.log('Composition API :: App component mounted');
     /**
-     * 1. 서울 공공도서관 데이터 읽어와서 / json 변환 / facilitys에 담기
+     * 1. 서울 공공도서관 데이터 읽어와서 / json 변환 / facilitys에 담기 / 스토어에 데이터 넣기
      */
     fetch("/example/seoul_public_lib.json")
     .then(res => res.json())
@@ -23,6 +25,8 @@ onMounted(() => {
         //console.log('facilitys', facilitys.value)
         //console.log('Main component mounted data', data.DATA);
         facilitys.value['서울공공도서관'].push(...data.DATA);
+        // 시설 스토어에 데이터 넘겨주기
+        facilityStore.setFacilities(facilitys.value);
         console.log('facilitys', facilitys.value);
     });
 });

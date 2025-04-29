@@ -86,7 +86,7 @@ function clickLnb(facName) {
     //console.log('Lnb component clickLnb', facName);
     // 스토어에 값 업데이트
     facilityStore.selectFacName(facName);
-    console.log('Lnb :: facilityStore.facilities',facilityStore.getFacName());
+    //console.log('Lnb :: facilityStore.facilities',facilityStore.getFacName());
 }
 </script>
 

@@ -11,7 +11,7 @@ export const useFacilityStore = defineStore('facility', {
       this.facilities = data;
     },
     selectFacName(facName) {
-      console.log('Selected facName:', facName);
+      //console.log('Selected facName:', facName);
       this.facName = facName;
     },
     getFacilities() {

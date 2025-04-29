@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { useMapStore } from '@/stores/useMapStore';
 import { useFacilityStore } from '@/stores/useFacilityStore';
 
@@ -56,7 +56,9 @@ onMounted(() => {
   console.log('NaverMap mounted map', map.value);
   // 스토어에 지도 저장
   mapStore.setNaverMap(map.value);
-  mapCtrl.checkMap();
+
+  console.log('NaverMap.vue :: mounted :: mapStore.naverMap', mapStore.naverMap);
+  //mapCtrl.checkMap();
 
   fetch('/geojson/seoul.geojson', {
     method: 'GET',
@@ -69,6 +71,32 @@ onMounted(() => {
       geojson.value = data;
       drawGeojson(data);
     });
+});
+
+watch(()=> facilityStore.facName, (newVal) => {
+  // 마커 초기화 로직
+  mapCtrl.clearMarkers();
+  if (newVal) {
+    console.log('NaverMap.uve :: watch :: 시설명1', facilityStore.facilities[newVal].length);
+    if(facilityStore.facilities[newVal].length > 0){
+      console.log('NaverMap.vue :: watch :: 시설명2', facilityStore.facilities[newVal]);
+      facilityStore.facilities[newVal].forEach(facility=>{
+        //console.log('NaverMap.vue :: watch :: 시설명3', facility);
+
+        const markerPosition = new naver.maps.LatLng(facility.xcnts, facility.ydnts); // 마커 위치 좌표
+
+        /**
+         * 마커생성
+         * @param {object} markerPosition - 마커 위치 좌표
+         * @param {string} title - 마커 제목
+         */
+        mapCtrl.addMarker(markerPosition,facility.lbrry_name);
+      })
+      //mapCtrl.addMarker(facilityStore.facilities[newVal]);
+    }else{
+      alert('선택하신 항목의 데이터가 없습니다.');
+    }
+  }
 });
 </script>
 
