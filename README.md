@@ -36,6 +36,11 @@ Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://
 < 2025.04.30 >
 - NaverMap.vue 지도 구현 방식 composition api로 변경
 - NaverMapCtrl.js 구성 :: 마커 표출 및 마커팝업 표출 **
+- 마커생성 조건 구체화 :: 선택한 항목의 데이터셋이 없을때(length > 0)는 알람
+
+- 마커 모양 변경(markerOptions :: icon)
+- 마커 클릭시 팝업 표출(데이터 내용 표출)
+- 마커 클러스터링
 
 
 < 주요 작업 목록 >
@@ -44,5 +49,6 @@ Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://
 - 데이터 차트화 (다른 영역에 왼쪽 메뉴 클릭 싱크 맞춰서 수치 및 조건 변하면 렌더링 다시 되게끔)
 - 구별 색상 다르게 입히기
 - 로딩상태 처리
+- 마커 이미지 맵 만들어서 키에 따라 다른 이미지 호출하게 수정 **
 + 반응형 UI로 작업
 + 데이터 API 데이터 처리 

@@ -26,7 +26,12 @@ const geojson = ref(null);
 // 지도 옵션 계산
 const mapOptions = computed(() => ({
   center: new naver.maps.LatLng(lat.value, lng.value),
-  zoom: zoom.value
+  zoom: zoom.value,
+  zoomControl: true,
+  zoomControlOptions: {
+    position: naver.maps.Position.TOP_LEFT,
+    style: naver.maps.ZoomControlStyle.SMALL
+  },
 }));
 
 // GeoJSON 그리기 함수
@@ -35,14 +40,16 @@ function drawGeojson(geojsonData) {
 
   map.value.data.addGeoJson(geojsonData);
   map.value.data.setStyle((feature) => {
-    let color = 'red';
+    let color = '#E3F2FD';
+    let strokeColor = '#90CAF9';
     if (feature.getProperty('isColorful')) {
       color = feature.getProperty('color');
     }
 
     return {
       fillColor: color,
-      strokeColor: color,
+      fillOpacity: 0.6,
+      strokeColor: strokeColor,
       strokeWeight: 2,
       icon: null
     };
@@ -89,8 +96,9 @@ watch(()=> facilityStore.facName, (newVal) => {
          * 마커생성
          * @param {object} markerPosition - 마커 위치 좌표
          * @param {string} title - 마커 제목
+         * @param {object} data - 마커 데이터
          */
-        mapCtrl.addMarker(markerPosition,facility.lbrry_name);
+        mapCtrl.addMarker(markerPosition,facility.lbrry_name,facility);
       })
       //mapCtrl.addMarker(facilityStore.facilities[newVal]);
     }else{
