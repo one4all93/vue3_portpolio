@@ -100,6 +100,7 @@ watch(()=> facilityStore.facName, (newVal) => {
          */
         mapCtrl.addMarker(markerPosition,facility.lbrry_name,facility);
       })
+      mapCtrl.initClustering();
       //mapCtrl.addMarker(facilityStore.facilities[newVal]);
     }else{
       alert('선택하신 항목의 데이터가 없습니다.');

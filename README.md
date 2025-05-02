@@ -1,8 +1,8 @@
 # Vue 3 + Vite
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
-
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+/**
+    "사용자 선택에 따라 특정 키 기반으로 마커 데이터를 필터링하여 지도에 동적으로 렌더링하고, 각 마커는 조건에 따라 다른 아이콘을 표시하도록 구현했습니다. Vue의 반응형 상태 관리와 Naver Maps API를 활용하여 사용자 인터랙션과 데이터 기반 UI를 연결했습니다."
+ */
 
 // main 기능 정리
 - 네이버맵 API 연동
@@ -38,10 +38,12 @@ Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://
 - NaverMapCtrl.js 구성 :: 마커 표출 및 마커팝업 표출 **
 - 마커생성 조건 구체화 :: 선택한 항목의 데이터셋이 없을때(length > 0)는 알람
 
-- 마커 모양 변경(markerOptions :: icon)
-- 마커 클릭시 팝업 표출(데이터 내용 표출)
-- 마커 클러스터링
+< 2025.05.02 >
+- MarkerClustering.js 호출관련 이슈가 있어서 직접 import
+- 마커 클러스터링 함수 추가 initClustering()
+- 마커 클러스터링(지도 레벨 12부터~ / [5, 10, 15, 20, 30] 갯수대로 묶기)
 
+- 마커 팝업에 닫기 버튼 추가 (다른항목 클릭시, 팝업 닫기)
 
 < 주요 작업 목록 >
 - 왼쪽 메뉴 구성 (2뎁스 이상) :: 클릭시, 해당 마커 및 데이터 표출
