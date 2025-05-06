@@ -14,11 +14,15 @@ export const useFacilityStore = defineStore('facility', {
       //console.log('Selected facName:', facName);
       this.facName = facName;
     },
-    getFacilities() {
-      return this.facilities;
-    },
-    getFacName() {
-      return this.facName;
-    }
+    // getFacilities() {
+    //   return this.facilities;
+    // },
+    // getFacName() {
+    //   return this.facName;
+    // }
+  },
+  getters: {
+    getFacilities: (state) => state.facilities,
+    getFacName: (state) => state.facName,
   },
 });
