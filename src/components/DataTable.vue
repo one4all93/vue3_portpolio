@@ -11,8 +11,15 @@
                     <div class="datatable-wrapper datatable-loading no-footer sortable searchable fixed-columns"><div class="datatable-top">
                     <div class="datatable-dropdown">
                     <label>
-                        <select class="datatable-selector"><option value="5">5</option><option value="10" selected="">10</option><option value="15">15</option><option value="20">20</option><option value="25">25</option></select> entries per page
-                        </label>
+                        <select class="datatable-selector" v-model="itemsPerPage">
+                            <option 
+                                v-for="item in viewCount" :key="item.value"
+                                :value="item.value" 
+                                :selected="item.selected"
+                            > {{ item.value }}
+                            </option>
+                        </select> 개씩 보기
+                    </label>
                 </div>
                 <div class="datatable-search">
                     <input class="datatable-input" placeholder="Search..." type="search" title="Search within table" aria-controls="datatablesSimple">
@@ -39,8 +46,8 @@
                                 </th>
                             </tr>
                         </thead>
-                        <tbody v-if="facDataList.length > 0">
-                            <tr v-for="data in facDataList" :key="data.lbrry_seq_no">
+                        <tbody v-if="pageDataList.length > 0">
+                            <tr v-for="data in pageDataList" :key="data.lbrry_seq_no">
                                 <td>{{ data.lbrry_name }}</td>
                                 <td>{{ data.code_value }}</td>
                                 <td>{{ data.adres }}</td>
@@ -56,24 +63,37 @@
                     </table>
                 </div>
                 <div class="datatable-bottom">
-                    <!-- <div class="datatable-info">Showing 1 to 10 of 57 entries</div> -->
-                    <!-- <nav class="datatable-pagination">
-                        <ul class="datatable-pagination-list">
-                            <li class="datatable-pagination-list-item datatable-hidden datatable-disabled">
-                                <a data-page="1" class="datatable-pagination-list-item-link">‹</a>
+                    <div class="datatable-info"> {{ (itemsPerPage * currentPage) + ' / ' + optionDataList.length }} 개</div>
+                    <nav class="datatable-pagination" v-if="pageDataList.length > 0">
+                        <ul class="datatable-pagination-list" >
+                            <li 
+                                :class="'datatable-pagination-list-item datatable-hidden datatable-' + (currentPage == 1 ? 'disabled' : '' )">
+                                <a 
+                                    data-page="1" 
+                                    class="datatable-pagination-list-item-link" 
+                                    @click.prevent="clickPage(1)">‹
+                                </a>
                             </li>
-                            <li class="datatable-pagination-list-item datatable-active"><a data-page="1" class="datatable-pagination-list-item-link">1</a>
+
+                            <li :class="'datatable-pagination-list-item ' + (currentPage == page ? 'active' : '')" v-for="page in pageNumber" :key="page">
+                                <a data-page="{{ page }}" class="datatable-pagination-list-item-link" @click.prevent="clickPage(page)">{{ page }}</a>
                             </li>
-                            <li class="datatable-pagination-list-item"><a data-page="2" class="datatable-pagination-list-item-link">2</a></li>
+
+                            <!-- <li class="datatable-pagination-list-item"><a data-page="2" class="datatable-pagination-list-item-link">2</a></li>
                             <li class="datatable-pagination-list-item"><a data-page="3" class="datatable-pagination-list-item-link">3</a></li>
                             <li class="datatable-pagination-list-item"><a data-page="4" class="datatable-pagination-list-item-link">4</a></li>
                             <li class="datatable-pagination-list-item"><a data-page="5" class="datatable-pagination-list-item-link">5</a></li>
-                            <li class="datatable-pagination-list-item"><a data-page="6" class="datatable-pagination-list-item-link">6</a>
-                            </li>
-                            <li class="datatable-pagination-list-item"><a data-page="2" class="datatable-pagination-list-item-link">›</a>
+                            <li class="datatable-pagination-list-item"><a data-page="6" class="datatable-pagination-list-item-link">6</a></li> -->
+                            
+                            <li :class="'datatable-pagination-list-item datatable-hidden datatable-' + (currentPage == pageNumber.length ? 'disabled' : '' )">
+                                <a 
+                                    data-page="{{ pageNumber.length }}" 
+                                    class="datatable-pagination-list-item-link"
+                                    @click.prevent="clickPage(pageNumber.length)">›
+                                </a>
                             </li>
                         </ul>
-                    </nav> -->
+                    </nav>
                 </div>
             </div>
         </div>
@@ -95,9 +115,34 @@ const facilityStore = useFacilityStore(); // 시설정보 스토어
 // const facName = ref('');   // 선택된 시설항목 명
 // const facData = ref([]); // 선택된 시설항목 데이터
 
+// lnb선택 항목 + 시설정보 데이터
 const facName = computed(() => facilityStore.getFacName);
 const facData = computed(() => facilityStore.getFacilities); // getter 또는 상태
 
+// 페이징관련 변수
+const currentPage = ref(1);
+const itemsPerPage = ref(10);   // datatable-selector에서 값 바인딩
+
+// 리스트 갯수 설정
+const viewCount = ref([
+    { value: 10, selected: true },
+    { value: 25 },
+    { value: 50 },
+])
+
+// 페이지 번호 설정
+const pageNumber = computed(() => {
+    const pageCount = Math.ceil(optionDataList.value.length / itemsPerPage.value);
+    // pageCount크기만큼의 배열을 만들고, 1(i+1)부터 pageCount까지의 숫자를 넣어준다.**
+    return Array.from({ length: pageCount }, (_, i) => i + 1);
+});
+
+function clickPage(page) {
+    currentPage.value = page;
+    console.log('clickPage', page);
+}
+
+// 리스트 표출 항목명 조합 후 리턴
 const makeFacName = computed(() =>
   facName.value ? facName.value : '선택된 항목이 없습니다.'
 );
@@ -106,6 +151,18 @@ const facDataList = computed(() =>
   facName.value && facData.value[facName.value] ? facData.value[facName.value] : []
 );
 
+// 리스트 검색 + 정렬 옵션(구현중...)
+const optionDataList = computed(() => {
+    return facDataList.value;
+});
+
+const pageDataList = computed(() => {
+    const start = (currentPage.value - 1) * itemsPerPage.value;
+    const end = start + itemsPerPage.value;
+    return optionDataList.value.slice(start, end);
+});
+
+// 값 변화 감지용*
 watch(facName, (newVal) => {
     console.log('DataTable component watch :: facName', newVal);
 });
