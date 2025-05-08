@@ -80,14 +80,44 @@ onMounted(() => {
     });
 });
 
-watch(()=> facilityStore.facName, (newVal) => {
+// watch(()=> facilityStore.facName, (newVal) => {
+//   // 마커 초기화 로직
+//   mapCtrl.clearMarkers();
+//   if (newVal) {
+//     console.log('NaverMap.uve :: watch :: 시설명1', facilityStore.facilities[newVal].length);
+//     if(facilityStore.facilities[newVal].length > 0){
+//       console.log('NaverMap.vue :: watch :: 시설명2', facilityStore.facilities[newVal]);
+//       facilityStore.facilities[newVal].forEach(facility=>{
+//         //console.log('NaverMap.vue :: watch :: 시설명3', facility);
+
+//         const markerPosition = new naver.maps.LatLng(facility.xcnts, facility.ydnts); // 마커 위치 좌표
+
+//         /**
+//          * 마커생성
+//          * @param {object} markerPosition - 마커 위치 좌표
+//          * @param {string} title - 마커 제목
+//          * @param {object} data - 마커 데이터
+//          */
+//         mapCtrl.addMarker(markerPosition,facility.lbrry_name,facility);
+//       })
+//       mapCtrl.initClustering();
+//       //mapCtrl.addMarker(facilityStore.facilities[newVal]);
+//     }else{
+//       alert('선택하신 항목의 데이터가 없습니다.');
+//     }
+//   }
+// });
+
+// 필터 된 데이터 표출(검색) :: 지도이동시 모든 마커 표출됨
+watch(()=> facilityStore.getSearchData, (newVal) => {
+  console.log('NaverMap.vue :: watch :: getSearchData', newVal.length);
   // 마커 초기화 로직
   mapCtrl.clearMarkers();
   if (newVal) {
-    console.log('NaverMap.uve :: watch :: 시설명1', facilityStore.facilities[newVal].length);
-    if(facilityStore.facilities[newVal].length > 0){
-      console.log('NaverMap.vue :: watch :: 시설명2', facilityStore.facilities[newVal]);
-      facilityStore.facilities[newVal].forEach(facility=>{
+    //console.log('NaverMap.uve :: watch :: 시설명1', facilityStore.facilities[newVal].length);
+    if(newVal.length > 0){
+      //console.log('NaverMap.vue :: watch :: 시설명2', newVal);
+      newVal.forEach(facility=>{
         //console.log('NaverMap.vue :: watch :: 시설명3', facility);
 
         const markerPosition = new naver.maps.LatLng(facility.xcnts, facility.ydnts); // 마커 위치 좌표
@@ -103,10 +133,30 @@ watch(()=> facilityStore.facName, (newVal) => {
       mapCtrl.initClustering();
       //mapCtrl.addMarker(facilityStore.facilities[newVal]);
     }else{
-      alert('선택하신 항목의 데이터가 없습니다.');
+      //alert('선택하신 항목의 데이터가 없습니다.');
     }
   }
 });
+
+watch(()=> facilityStore.getSelectListData , newVal => {
+  const markers = mapCtrl.markers.value; // 마커맵
+  //const selectedMarker = [];
+  //console.log('NaverMap.vue :: watch :: getSelectListData', newVal , markers);
+  if(Object.keys(newVal).length > 0){
+    // 트리거안에서 마커맵 필터 체이닝구조로 변경**(가독성)
+    naver.maps.Event.trigger(
+      markers.filter(marker => marker.data.lbrry_seq_no === newVal.lbrry_seq_no)[0],
+      'click'
+    );
+    // selectedMarker = markers.filter(marker => { 
+    //   //console.log('NaverMap.vue :: watch :: selectedMarker', marker.data, newVal);
+    //   return marker.data.lbrry_seq_no ==  newVal.lbrry_seq_no;
+    // });
+    // console.log('NaverMap.vue :: watch :: selectedMarker', selectedMarker[0]);
+    // naver.maps.Event.trigger(selectedMarker[0], 'click');
+  }
+})
+
 </script>
 
 <!-- <script>

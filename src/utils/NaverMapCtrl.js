@@ -1,8 +1,11 @@
 // NaverMapCtrl.js
 import { ref , watch } from 'vue';
 import { useMapStore } from '@/stores/useMapStore';
+import { useFacilityStore } from '@/stores/useFacilityStore';
 
 export function useMapCtrl() {
+  const facilityStore = useFacilityStore(); // 시설정보 스토어
+
   const mapStore = useMapStore(); // 지도
   const map = ref(null); // 지도 인스턴스
 
@@ -35,7 +38,7 @@ export function useMapCtrl() {
         anchor: new naver.maps.Point(20, 20)
     };      
 
-  console.log('htmlMarker1',htmlMarker1)
+  //console.log('htmlMarker1',htmlMarker1)
 
   const markers = ref([]);
 
@@ -46,11 +49,26 @@ export function useMapCtrl() {
         // mapInstance로 마커 그리기 등 실행
         console.log('지도 준비됨:', mapInstance);
         map.value = mapInstance;
-        initClustering();
+        //initClustering();
       }
     },
     { immediate: true }
   );
+
+  // watch(
+  //   () => facilityStore.searchData,
+  //   (newData) => {
+  //     if (newData.length > 0) {
+  //       clearMarkers();
+  //       newData.forEach((data) => {
+  //         const position = new naver.maps.LatLng(data.latitude, data.longitude);
+  //         addMarker(position, data.lbrry_name, data);
+  //       });
+  //       initClustering();
+  //     }
+  //   },
+  //   { immediate: true }
+  // );
 
   function initMap(naverMapInstance) {
     map.value = naverMapInstance;
@@ -59,6 +77,12 @@ export function useMapCtrl() {
   // 마커 클러스터링
   function initClustering() {
     if (!map.value) return;
+    console.log('initClustering :: markers', markers.value.length);
+
+    if (markerCluster) {
+      markerCluster.setMap(null); // 클러스터 제거
+      markerCluster = null; // 클러스터 인스턴스 초기화
+    }
 
     markerCluster = new MarkerClustering({
       minClusterSize: 2,
@@ -110,6 +134,7 @@ export function useMapCtrl() {
       '   <p class="info"> 전화번호 : ', data.tel_no ,'<br />',
       '       <a href="', data.hmpg_url , '" target="_blank">' , data.hmpg_url , '</a>',
       '   </p>',
+      '   <button class="close-btn">닫기</button>',
       '</div>'
     ].join('');
 
@@ -124,22 +149,73 @@ export function useMapCtrl() {
     });
 
     markers.value.push(marker);
-
-    //initClustering();
-
-    //console.log('markerCluster', markerCluster);
-
-    // if (markerCluster) {
-    //   markerCluster.addMarkers(marker.value);
-    // }
     
     // 마커 클릭 이벤트
     naver.maps.Event.addListener(marker, 'click', () => {
       //alert('"' + marker.title + '" 마커가 클릭되었습니다!');
       //console.log('marker click', marker);
+      marker.setIcon({
+        url: '/marker/library.png', // 클릭 시 마커 이미지 URL
+        scaledSize: new naver.maps.Size(34, 45), // 클릭 시 마커 이미지 크기
+      });
+
+      // 이전에 클릭된 마커의 아이콘을 원래대로 되돌리기
+      if (window.lastClickedMarker && window.lastClickedMarker !== marker) {
+        window.lastClickedMarker.setIcon({
+          url: '/marker/library.png', // 마커 이미지 URL
+          scaledSize: new naver.maps.Size(24, 35), // 마커 이미지 크기
+        });
+      }
+
+      //console.log('marker click', marker);
+      // 클릭된 마커를 현재 클릭된 마커로 저장
+      facilityStore.setSelectMarker(marker); // 선택된 마커 저장
+      window.lastClickedMarker = marker; // 현재 클릭된 마커 저장
+
       infoWindow.open(map.value, marker);
+
+      // 닫기 버튼 클릭 이벤트
+      const closeButton = document.querySelector('.close-btn');
+      if (closeButton) {
+        closeButton.addEventListener('click', () => {
+          window.lastClickedMarker.setIcon({
+            url: '/marker/library.png', // 마커 이미지 URL
+            scaledSize: new naver.maps.Size(24, 35), // 마커 이미지 크기
+          });
+          infoWindow.close();
+        });
+      }
+      
     });    
   }
+
+  // function updateMarkers(searchData) {
+  //   //clearMarkers(); // 기존 마커 제거
+  
+  //   // 새로운 마커 생성
+  //   searchData.forEach((data) => {
+  //     const position = new naver.maps.LatLng(data.latitude, data.longitude);
+  //     addMarker(position, data.lbrry_name, data);
+  //   });
+  
+  //   // 클러스터링 갱신
+  //   if (markerCluster) {
+  //     markerCluster.clear(); // 클러스터 안의 마커 초기화
+  //     markerCluster.setMarkers(markers.value); // 새 마커로 갱신
+  //   } else {
+  //     initClustering(); // 처음 한 번만 생성되도록
+  //   }
+  // }
+
+  function updateMarkers(searchData) {
+    clearMarkers();
+    searchData.forEach(data => {
+      const position = new naver.maps.LatLng(data.xcnts, data.ydnts);
+      addMarker(position, data.lbrry_name, data);
+    });
+    initClustering();
+  }
+  
 
   function moveCenter(position) {
     if (map.value) {
@@ -149,10 +225,12 @@ export function useMapCtrl() {
 
   return {
     map,
+    markers,
     initMap,
     initClustering,
     clearMarkers,
     addMarker,
+    updateMarkers,
     moveCenter
   };
 }
