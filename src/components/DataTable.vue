@@ -5,7 +5,7 @@
                 <div class="card mb-4">
                 <div class="card-header">
                     <svg class="svg-inline--fa fa-table me-1" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="table" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M64 256V160H224v96H64zm0 64H224v96H64V320zm224 96V320H448v96H288zM448 256H288V160H448v96zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64z"></path></svg>
-                    {{ makeFacName }}
+                    {{ makeFacName('list') }}
                 </div>
                 <div class="card-body">
                     <div class="datatable-wrapper datatable-loading no-footer sortable searchable fixed-columns"><div class="datatable-top">
@@ -127,6 +127,8 @@ const search = ref(''); // 최종 검색어
 
 // 선택한 데이터
 const selectedListData = computed(()=> facilityStore.getSelectListData) // 클릭한 데이터의 lbrry_seq_no
+const makeFacName = computed(()=> facilityStore.makeFacName);
+const selectedGu = computed(() => facilityStore.getSelectedGu); // 선택된 구코드
 
 // 정렬 관련
 // const sortMap = ref([
@@ -166,9 +168,9 @@ function clickPage(page) {
 }
 
 // 리스트 표출 항목명 조합 후 리턴
-const makeFacName = computed(() =>
-  facName.value ? facName.value : '선택된 항목이 없습니다.'
-);
+// const makeFacName = computed(() =>
+//   facName.value ? facName.value : '선택된 항목이 없습니다.'
+// );
 
 const facDataList = computed(() =>
   facName.value && facData.value[facName.value] ? facData.value[facName.value] : []
@@ -232,6 +234,11 @@ function clickList(data) {
     // 시설정보 스토어에 데이터 넘겨주기
     facilityStore.setSelectListData(data);
 }
+
+watch(selectedGu , (newVal)=>{
+    console.log('DataTable component watch :: selectedGu', newVal);
+    searchKeyword.value = newVal; // 구코드 검색어로 설정
+})
 
 watch(selectedListData, (newVal) => {
     //console.log('DataTable component watch :: selectedListData', newVal);

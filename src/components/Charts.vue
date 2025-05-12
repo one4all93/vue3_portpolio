@@ -1,11 +1,11 @@
 <template>
     <div class="col-xl-4">
-        <div class="card h-50">
+        <div class="card h-100">
             <div class="card-header">
-                <svg class="svg-inline--fa fa-chart-bar me-1" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chart-bar" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M32 32c17.7 0 32 14.3 32 32V400c0 8.8 7.2 16 16 16H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H80c-44.2 0-80-35.8-80-80V64C0 46.3 14.3 32 32 32zm96 96c0-17.7 14.3-32 32-32l192 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-192 0c-17.7 0-32-14.3-32-32zm32 64H288c17.7 0 32 14.3 32 32s-14.3 32-32 32H160c-17.7 0-32-14.3-32-32s14.3-32 32-32zm0 96H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H160c-17.7 0-32-14.3-32-32s14.3-32 32-32z"></path></svg><!-- <i class="fas fa-chart-bar me-1"></i> Font Awesome fontawesome.com -->
-                Bar Chart Example
+                <svg class="svg-inline--fa fa-chart-bar me-1" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chart-bar" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M32 32c17.7 0 32 14.3 32 32V400c0 8.8 7.2 16 16 16H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H80c-44.2 0-80-35.8-80-80V64C0 46.3 14.3 32 32 32zm96 96c0-17.7 14.3-32 32-32l192 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-192 0c-17.7 0-32-14.3-32-32zm32 64H288c17.7 0 32 14.3 32 32s-14.3 32-32 32H160c-17.7 0-32-14.3-32-32s14.3-32 32-32zm0 96H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H160c-17.7 0-32-14.3-32-32s14.3-32 32-32z"></path></svg>
+                {{ makeFacName('chart') }}
             </div>
-            <div class="card-body">
+            <div class="card-body" style="width: 100%; height: 500px; overflow: auto;">
 
                 <Chart 
                     :type="'bar'" 
@@ -15,13 +15,13 @@
 
             </div>
         </div>
-        <div class="card h-50">
+        <!-- <div class="card h-50">
             <div class="card-header">
-                <svg class="svg-inline--fa fa-chart-bar me-1" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chart-bar" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M32 32c17.7 0 32 14.3 32 32V400c0 8.8 7.2 16 16 16H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H80c-44.2 0-80-35.8-80-80V64C0 46.3 14.3 32 32 32zm96 96c0-17.7 14.3-32 32-32l192 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-192 0c-17.7 0-32-14.3-32-32zm32 64H288c17.7 0 32 14.3 32 32s-14.3 32-32 32H160c-17.7 0-32-14.3-32-32s14.3-32 32-32zm0 96H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H160c-17.7 0-32-14.3-32-32s14.3-32 32-32z"></path></svg><!-- <i class="fas fa-chart-bar me-1"></i> Font Awesome fontawesome.com -->
+                <svg class="svg-inline--fa fa-chart-bar me-1" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chart-bar" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M32 32c17.7 0 32 14.3 32 32V400c0 8.8 7.2 16 16 16H480c17.7 0 32 14.3 32 32s-14.3 32-32 32H80c-44.2 0-80-35.8-80-80V64C0 46.3 14.3 32 32 32zm96 96c0-17.7 14.3-32 32-32l192 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-192 0c-17.7 0-32-14.3-32-32zm32 64H288c17.7 0 32 14.3 32 32s-14.3 32-32 32H160c-17.7 0-32-14.3-32-32s14.3-32 32-32zm0 96H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H160c-17.7 0-32-14.3-32-32s14.3-32 32-32z"></path></svg>
                 Bar Chart Example
             </div>
             <div class="card-body"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div><canvas id="myBarChart" width="1288" height="514" style="display: block; height: 257px; width: 644px;" class="chartjs-render-monitor"></canvas></div>
-        </div>
+        </div> -->
     </div>
 </template>
 
@@ -35,6 +35,8 @@ const facilityStore = useFacilityStore();
 
 const facName = computed(() => facilityStore.getFacName); // 선택된 시설명
 const facData = computed(() => facilityStore.getFacilities); // 시설정보
+
+const makeFacName = computed(()=> facilityStore.makeFacName); // 선택된 시설명
 
 // 차트 데이터 :: 라벨(x축)
 const labels = computed(() => {
@@ -59,9 +61,10 @@ const datasets = computed(() => {
     return [{
         label: facName.value,
         data: countsByGu,
-        backgroundColor: 'rgba(2,117,216,1)',
-        hoverBackgroundColor: 'rgba(2,117,216,0.7)',
-        borderColor: 'rgba(2,117,216,1)',
+        backgroundColor: '#36A2EB',
+        borderColor: '#1e88e5',
+        hoverBackgroundColor: '#FF6384',
+        hoverBorderColor: '#c2185b',
         borderWidth: 1
     }];
 

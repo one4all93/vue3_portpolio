@@ -9,6 +9,7 @@ export const useFacilityStore = defineStore('facility', {
     searchData : [],
     selectListData : [],
     selectMarker : [],
+    selectedGu : null,
   }),
   actions: {
     setFacilities(data) {
@@ -27,6 +28,9 @@ export const useFacilityStore = defineStore('facility', {
     setSelectMarker(data) {
       this.selectMarker = data;
     },
+    setSelectedGu(data) {
+      this.selectedGu = data;
+    },
     // getFacilities() {
     //   return this.facilities;
     // },
@@ -40,5 +44,16 @@ export const useFacilityStore = defineStore('facility', {
     getSearchData: (state) => state.searchData,
     getSelectListData: (state) => state.selectListData,
     getSelectMarker: (state) => state.selectMarker,
+    getSelectedGu: (state) => state.selectedGu,
+
+    // 리스트 표출 항목명 조합 후 리턴 (공통함수로 빼놓음**)
+    makeFacName : (state) => (func) =>{
+      if(func == 'list'){
+        return state.facName ? (state.facName + ' 리스트') : '선택된 항목이 없습니다.'
+      }else if(func == 'chart'){
+        return state.facName ? (state.facName  + ' 구별 갯수'): '선택된 항목이 없습니다.'
+      }
+    },
+    
   },
 });

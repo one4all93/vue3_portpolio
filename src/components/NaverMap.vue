@@ -9,9 +9,14 @@ import { useFacilityStore } from '@/stores/useFacilityStore';
 
 import { useMapCtrl } from '@/utils/NaverMapCtrl'; // 지도 컨트롤러
 
+import { emitter } from '@/utils/eventBus';
+
 // 스토어
 const mapStore = useMapStore(); // 지도
 const facilityStore = useFacilityStore(); // 시설정보
+
+const selectedGu = computed(() => facilityStore.getSelectedGu); // 선택된 구
+const selectedGeojson = ref({}) // 선택된 geojson
 
 const mapCtrl = useMapCtrl(); // 지도 컨트롤러
 
@@ -40,20 +45,69 @@ function drawGeojson(geojsonData) {
 
   map.value.data.addGeoJson(geojsonData);
   map.value.data.setStyle((feature) => {
-    let color = '#E3F2FD';
+    let fillColor = '#E3F2FD';
     let strokeColor = '#90CAF9';
+    let strokeWeight = 2;
+
     if (feature.getProperty('isColorful')) {
-      color = feature.getProperty('color');
+      fillColor = feature.getProperty('fillColor');
+    }
+
+    // if (feature.getProperty('focus')) {
+    //     styleOptions.fillOpacity = 0.6;
+    //     styleOptions.fillColor = '#0f0';
+    //     styleOptions.strokeColor = '#0f0';
+    //     styleOptions.strokeWeight = 4;
+    //     styleOptions.strokeOpacity = 1;
+    // }
+
+    if (feature.getProperty('isSelected')) {
+      fillColor = '#FF6384';
+      strokeColor = '#c2185b';
+      strokeWeight = 3;
+    }
+
+    if (feature.getProperty('isHover')) {
+      fillColor = '#FFCDD2';
+      strokeWeight = 4;
     }
 
     return {
-      fillColor: color,
+      fillColor: fillColor,
       fillOpacity: 0.6,
       strokeColor: strokeColor,
       strokeWeight: 2,
       icon: null
     };
+
   });
+
+  // 클릭이벤트 추가
+  map.value.data.addListener('click', (e) => {
+    console.log('NaverMap.vue :: drawGeojson :: click', e.feature.property_SGG_NM);
+    
+    if(selectedGu.value == null){
+      e.feature.setProperty('isSelected', true); // 클릭한 영역만 색 변경하게 
+      facilityStore.setSelectedGu(e.feature.property_SGG_NM); // 클릭한 구코드 저장
+      emitter.emit('NaverMap.vue :: selectGu', e.feature.property_SGG_NM); // 이벤트 발생
+    }else{
+      e.feature.setProperty('isSelected', false);
+      facilityStore.setSelectedGu(null); // 클릭한 구코드 저장
+      emitter.emit('NaverMap.vue :: selectGu', null); // 이벤트 발생
+    }
+  });
+
+  // 해당영역 호버 기능
+  map.value.data.addListener('mouseover', (e) => {
+    e.feature.setProperty('isHover', true);
+  });
+
+  // 마우스오버 끝나면 스타일 원복
+  map.value.data.addListener('mouseout', (e) => {
+    e.feature.setProperty('isHover', false);
+  });
+
+  //console.log('drawGeojson', map.value.data);
 }
 
 // 지도 초기화 및 GeoJSON 로딩
@@ -107,6 +161,30 @@ onMounted(() => {
 //     }
 //   }
 // });
+watch(selectedGu , (newVal)=>{
+  console.log('NaverMap.vue :: watch :: selectedGu', newVal);
+  // 노원구 / 도봉구 / 성북구(영역없음 :: 원천에도 없음) =>  클릭시 스타일 변화 없음 :: 구코드가 다른듯
+  map.value.data.forEach((feature) => {   
+    const guCode = feature.property_SGG_NM; // 구코드
+    //console.log('NaverMap.vue :: watch :: guCode', feature);
+    if(newVal == null){
+      feature.setProperty('isColorful', false); // 색상도 같이 변경하려면
+      feature.setProperty('color', '#E3F2FD'); // 원하는 색상 지정
+    }else{
+      if(guCode.includes(newVal)){  // 구코드 이름이 달라서 includes로 변경(직접비교 X)
+        selectedGeojson.value = feature; // 선택된 geojson 저장
+        feature.setProperty('isColorful', true); // 색상도 같이 변경하려면
+        feature.setProperty('color', '#FF6384'); // 원하는 색상 지정
+      }else{
+        feature.setProperty('isColorful', false); // 색상도 같이 변경하려면
+        feature.setProperty('color', '#E3F2FD'); // 원하는 색상 지정
+      }
+    }
+
+
+
+  });
+})
 
 // 필터 된 데이터 표출(검색) :: 지도이동시 모든 마커 표출됨
 watch(()=> facilityStore.getSearchData, (newVal) => {
