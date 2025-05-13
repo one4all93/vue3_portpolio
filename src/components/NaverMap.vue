@@ -86,14 +86,32 @@ function drawGeojson(geojsonData) {
   map.value.data.addListener('click', (e) => {
     console.log('NaverMap.vue :: drawGeojson :: click', e.feature.property_SGG_NM);
     
-    if(selectedGu.value == null){
+    // 선택된 데이터 항목 없을때는 튕기기
+    console.log('2312321321321', facilityStore.getSearchData);
+    if(facilityStore.getSearchData.length == 0){
+      alert('선택된 데이터가 없습니다. 시설항목에서 데이터를 선택해주세요.');
+      return;
+    }
+
+    // 다른 영역 클릭 했을때
+    if(selectedGeojson.value.property_SGG_NM != e.feature.property_SGG_NM){
+      
+      // 이전에 클릭했던 영역 초기화
+      if (selectedGeojson.value.setProperty) {
+        selectedGeojson.value.setProperty('isSelected', false);
+      }
+
+      // 선택한 영역 활성화
+      selectedGeojson.value = e.feature;
       e.feature.setProperty('isSelected', true); // 클릭한 영역만 색 변경하게 
       facilityStore.setSelectedGu(e.feature.property_SGG_NM); // 클릭한 구코드 저장
       emitter.emit('NaverMap.vue :: selectGu', e.feature.property_SGG_NM); // 이벤트 발생
     }else{
+      // 같은 영역 클릭했을때 :: 영역클릭된 값이 있을때 => 해당영역값 해제 필요
       e.feature.setProperty('isSelected', false);
       facilityStore.setSelectedGu(null); // 클릭한 구코드 저장
       emitter.emit('NaverMap.vue :: selectGu', null); // 이벤트 발생
+      selectedGeojson.value = {};
     }
   });
 
