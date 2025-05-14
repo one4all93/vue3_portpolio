@@ -184,23 +184,17 @@ watch(selectedGu , (newVal)=>{
   // 노원구 / 도봉구 / 성북구(영역없음 :: 원천에도 없음) =>  클릭시 스타일 변화 없음 :: 구코드가 다른듯
   map.value.data.forEach((feature) => {   
     const guCode = feature.property_SGG_NM; // 구코드
-    //console.log('NaverMap.vue :: watch :: guCode', feature);
-    if(newVal == null){
-      feature.setProperty('isColorful', false); // 색상도 같이 변경하려면
-      feature.setProperty('color', '#E3F2FD'); // 원하는 색상 지정
+
+    if(guCode.includes(newVal)){  // 구코드 이름이 달라서 includes로 변경(직접비교 X)
+      console.log('NaverMap.vue :: watch :: guCode', guCode , newVal);
+      selectedGeojson.value = feature; // 선택된 geojson 저장
+      feature.setProperty('isSelected', true); // 색상도 같이 변경하려면
+      feature.setProperty('color', '#FF6384'); // 원하는 색상 지정
     }else{
-      if(guCode.includes(newVal)){  // 구코드 이름이 달라서 includes로 변경(직접비교 X)
-        selectedGeojson.value = feature; // 선택된 geojson 저장
-        feature.setProperty('isColorful', true); // 색상도 같이 변경하려면
-        feature.setProperty('color', '#FF6384'); // 원하는 색상 지정
-      }else{
-        feature.setProperty('isColorful', false); // 색상도 같이 변경하려면
-        feature.setProperty('color', '#E3F2FD'); // 원하는 색상 지정
-      }
+      feature.setProperty('isSelected', false); // 색상도 같이 변경하려면
+      feature.setProperty('color', '#E3F2FD'); // 원하는 색상 지정
     }
-
-
-
+    
   });
 })
 
