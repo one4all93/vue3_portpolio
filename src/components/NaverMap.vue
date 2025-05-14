@@ -84,10 +84,10 @@ function drawGeojson(geojsonData) {
 
   // 클릭이벤트 추가
   map.value.data.addListener('click', (e) => {
-    console.log('NaverMap.vue :: drawGeojson :: click', e.feature.property_SGG_NM);
+    //console.log('NaverMap.vue :: drawGeojson :: click', e.feature.property_SGG_NM);
     
     // 선택된 데이터 항목 없을때는 튕기기
-    console.log('2312321321321', facilityStore.getSearchData);
+    //console.log('2312321321321', facilityStore.getSearchData);
     if(facilityStore.getSearchData.length == 0){
       alert('선택된 데이터가 없습니다. 시설항목에서 데이터를 선택해주세요.');
       return;
@@ -130,13 +130,11 @@ function drawGeojson(geojsonData) {
 
 // 지도 초기화 및 GeoJSON 로딩
 onMounted(() => {
-  console.log('NaverMap mounted');
   map.value = new naver.maps.Map('map', mapOptions.value);
-  console.log('NaverMap mounted map', map.value);
+  //console.log('NaverMap mounted map', map.value);
   // 스토어에 지도 저장
   mapStore.setNaverMap(map.value);
 
-  console.log('NaverMap.vue :: mounted :: mapStore.naverMap', mapStore.naverMap);
   //mapCtrl.checkMap();
 
   fetch('/geojson/seoul.geojson', {
@@ -180,13 +178,13 @@ onMounted(() => {
 //   }
 // });
 watch(selectedGu , (newVal)=>{
-  console.log('NaverMap.vue :: watch :: selectedGu', newVal);
+  //console.log('NaverMap.vue :: watch :: selectedGu', newVal);
   // 노원구 / 도봉구 / 성북구(영역없음 :: 원천에도 없음) =>  클릭시 스타일 변화 없음 :: 구코드가 다른듯
   map.value.data.forEach((feature) => {   
     const guCode = feature.property_SGG_NM; // 구코드
 
     if(guCode.includes(newVal)){  // 구코드 이름이 달라서 includes로 변경(직접비교 X)
-      console.log('NaverMap.vue :: watch :: guCode', guCode , newVal);
+      //console.log('NaverMap.vue :: watch :: guCode', guCode , newVal);
       selectedGeojson.value = feature; // 선택된 geojson 저장
       feature.setProperty('isSelected', true); // 색상도 같이 변경하려면
       feature.setProperty('color', '#FF6384'); // 원하는 색상 지정
@@ -200,7 +198,7 @@ watch(selectedGu , (newVal)=>{
 
 // 필터 된 데이터 표출(검색) :: 지도이동시 모든 마커 표출됨
 watch(()=> facilityStore.getSearchData, (newVal) => {
-  console.log('NaverMap.vue :: watch :: getSearchData', newVal.length);
+  //console.log('NaverMap.vue :: watch :: getSearchData', newVal.length);
   // 마커 초기화 로직
   mapCtrl.clearMarkers();
   if (newVal) {

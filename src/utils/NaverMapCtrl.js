@@ -47,7 +47,7 @@ export function useMapCtrl() {
     (mapInstance) => {
       if (mapInstance) {
         // mapInstance로 마커 그리기 등 실행
-        console.log('지도 준비됨:', mapInstance);
+        //console.log('지도 준비됨:', mapInstance);
         map.value = mapInstance;
         //initClustering();
       }
@@ -77,7 +77,7 @@ export function useMapCtrl() {
   // 마커 클러스터링
   function initClustering() {
     if (!map.value) return;
-    console.log('initClustering :: markers', markers.value.length);
+    //console.log('initClustering :: markers', markers.value.length);
 
     if (markerCluster) {
       markerCluster.setMap(null); // 클러스터 제거

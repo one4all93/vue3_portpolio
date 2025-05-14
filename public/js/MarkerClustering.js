@@ -79,7 +79,7 @@ naver.maps.Util.ClassExtend(MarkerClustering, naver.maps.OverlayView, {
 	 * @param {Object | string} newOptions 옵션
 	 */
 	setOptions: function(newOptions) {	
-		console.log('MarkerClustering.js :: setOptions', newOptions);
+		//console.log('MarkerClustering.js :: setOptions', newOptions);
 		var _this = this;
 
 		if (typeof newOptions === 'string') {

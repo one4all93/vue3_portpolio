@@ -73,7 +73,7 @@
             initColor(dataset);
 
             if(selectedIndex.value == null || index != selectedIndex.value || selectedGu.value == null){
-              console.log('선택된 구코드 :: selectedGu', selectedGu);
+              //console.log('선택된 구코드 :: selectedGu', selectedGu);
               //console.log('새로운 데이터 클릭' , dataset);
               // 클릭된 항목만 색 변경
               dataset.backgroundColor[index] = '#FF6384';

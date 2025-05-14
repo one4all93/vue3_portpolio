@@ -27,7 +27,7 @@ onMounted(() => {
         facilitys.value['서울공공도서관'].push(...data.DATA);
         // 시설 스토어에 데이터 넘겨주기
         facilityStore.setFacilities(facilitys.value);
-        console.log('facilitys', facilitys.value);
+        //console.log('facilitys', facilitys.value);
     });
 });
 </script>

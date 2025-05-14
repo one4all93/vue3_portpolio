@@ -44,7 +44,7 @@ const facilityStore = useFacilityStore();
 const selectedFacName = computed(() => facilityStore.getFacName); // 선택된 시설항목명
 
 function clickLnb(facName) {
-    console.log('Lnb.vue :: clickLnb', facName , selectedFacName.value);
+    //console.log('Lnb.vue :: clickLnb', facName , selectedFacName.value);
     // 한번 더 선택하면 값 초기화
     if (selectedFacName.value == facName) {
         facilityStore.selectFacName('');

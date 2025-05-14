@@ -220,7 +220,7 @@ const optionDataList = computed(() => {
 
     // 검색어가 있을 경우 ([기능보완필요] :: 검색어가 모두 입력된후 검색되게 기능 보완필요)
     if (search.value) {
-        console.log('search.value', search.value);
+        //console.log('search.value', search.value);
         // 검색어 :: 도서관이름 / 주소 / 전화번호 / 홈페이지주소 / 구코드명
         dataList = dataList.filter(data => {
             return (data.lbrry_name ?? '').toLowerCase().includes(search.value) || 
@@ -297,7 +297,7 @@ watch(() => facilityStore.getSelectMarker, (newVal) => {
 
 
 watch(itemsPerPage, (newVal) => {
-    console.log('DataTable component watch :: itemsPerPage', newVal);
+    //console.log('DataTable component watch :: itemsPerPage', newVal);
     // 리스트 갯수 변경시 페이지 초기화
     currentPage.value = 1;
 });
