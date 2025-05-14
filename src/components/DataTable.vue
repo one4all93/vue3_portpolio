@@ -72,12 +72,20 @@
                     <div class="datatable-info"> {{ (itemsPerPage * currentPage) + ' / ' + optionDataList.length }} 개</div>
                     <nav class="datatable-pagination" v-if="pageDataList.length > 0">
                         <ul class="datatable-pagination-list" >
+                            <!-- <li 
+                                :class="'datatable-pagination-list-item datatable-hidden datatable-' + (currentPage == 1 ? 'disabled' : '' )">
+                                <a 
+                                    data-page="1" 
+                                    class="datatable-pagination-list-item-link" 
+                                    @click.prevent="clickPage(1)">‹‹
+                                </a>
+                            </li> -->
                             <li 
                                 :class="'datatable-pagination-list-item datatable-hidden datatable-' + (currentPage == 1 ? 'disabled' : '' )">
                                 <a 
                                     data-page="1" 
                                     class="datatable-pagination-list-item-link" 
-                                    @click.prevent="clickPage(1)">‹
+                                    @click.prevent="clickPage(currentPage-1)">‹
                                 </a>
                             </li>
 
@@ -85,13 +93,23 @@
                                 <a data-page="{{ page }}" class="datatable-pagination-list-item-link" @click.prevent="clickPage(page)">{{ page }}</a>
                             </li>
 
+                            
                             <li :class="'datatable-pagination-list-item datatable-hidden datatable-' + (currentPage == pageNumber.length ? 'disabled' : '' )">
+                                <a 
+                                data-page="{{ pageNumber.length }}" 
+                                class="datatable-pagination-list-item-link"
+                                @click.prevent="clickPage(currentPage+1)">›
+                                </a>
+                            </li>
+                        
+                            <!-- <li :class="'datatable-pagination-list-item datatable-hidden datatable-' + (currentPage == pageNumber.length ? 'disabled' : '' )">
                                 <a 
                                     data-page="{{ pageNumber.length }}" 
                                     class="datatable-pagination-list-item-link"
-                                    @click.prevent="clickPage(pageNumber.length)">›
+                                    @click.prevent="clickPage(pageNumber.length)">››
                                 </a>
-                            </li>
+                            </li> -->
+
                         </ul>
                     </nav>
                 </div>
@@ -155,14 +173,32 @@ const viewCount = ref([
     { value: 50 },
 ])
 
-// 페이지 번호 설정
+// 페이지 번호 설정 (페이지 너무 많아서 간소화하게 수정)
 const pageNumber = computed(() => {
     const pageCount = Math.ceil(optionDataList.value.length / itemsPerPage.value);
-    // pageCount크기만큼의 배열을 만들고, 1(i+1)부터 pageCount까지의 숫자를 넣어준다.**
+    // const maxPages = 5; // 최대 페이지 버튼 수
+
+    // if (pageCount <= maxPages) {
+    //     return Array.from({ length: pageCount }, (_, i) => i + 1);
+    // }
+
+    // const startPage = Math.max(currentPage.value - Math.floor(maxPages / 2), 1);
+    // const endPage = Math.min(startPage + maxPages - 1, pageCount);
+    
+    // let pages = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
+    // if (startPage > 1) pages.unshift('...');
+    // if (endPage < pageCount) pages.push('...');
+    
+    // return pages;
+
+    //pageCount크기만큼의 배열을 만들고, 1(i+1)부터 pageCount까지의 숫자를 넣어준다.**
     return Array.from({ length: pageCount }, (_, i) => i + 1);
 });
 
 function clickPage(page) {
+    if (page === '...') {
+        return; // "..."은 클릭하지 않도록 처리
+    }
     currentPage.value = page;
     //console.log('clickPage', page);
 }
@@ -230,19 +266,14 @@ function clickSort(sortName) {
 
 // 리스트 데이터 클릭
 function clickList(data) {
-    //console.log('clickList', data);
     // 시설정보 스토어에 데이터 넘겨주기
     facilityStore.setSelectListData(data);
 }
 
 watch(selectedGu , (newVal)=>{
-    console.log('DataTable component watch :: selectedGu', newVal);
     searchKeyword.value = newVal; // 구코드 검색어로 설정
 })
 
-watch(selectedListData, (newVal) => {
-    //console.log('DataTable component watch :: selectedListData', newVal);
-});
 
 // 클릭한 마커 정보
 watch(() => facilityStore.getSelectMarker, (newVal) => {
@@ -250,26 +281,19 @@ watch(() => facilityStore.getSelectMarker, (newVal) => {
         const selectedData = optionDataList.value.find(data => data.lbrry_seq_no === newVal.data.lbrry_seq_no);
 
         if (selectedData) {
-            //console.log('DataTable component watch :: getSelectMarker', selectedData);
             // 클릭한 마커의 데이터로 리스트 선택
             facilityStore.setSelectListData(selectedData);
         }
 
         // 클릭한 마커와 일치하는 데이터의 순서 확인
         const dataIdx = optionDataList.value.indexOf(selectedData);
-        //console.log('DataTable component watch :: dataIdx', dataIdx);
 
         // 페이지 번호 계산
         const pageNumber = Math.floor(dataIdx / itemsPerPage.value) + 1; 
-        //console.log('DataTable component watch :: pageNumber', pageNumber , dataIdx , itemsPerPage.value);
         clickPage(pageNumber); // 페이지 이동
     }
 });
 
-// 값 변화 감지용*
-watch(facName, (newVal) => {
-    console.log('DataTable component watch :: facName', newVal);
-});
 
 
 watch(itemsPerPage, (newVal) => {
