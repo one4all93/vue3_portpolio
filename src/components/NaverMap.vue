@@ -15,6 +15,15 @@ import { emitter } from '@/utils/eventBus';
 const mapStore = useMapStore(); // 지도
 const facilityStore = useFacilityStore(); // 시설정보
 
+// const selectedFacName = computed(() => facilityStore.getFacName); // 선택된 시설항목명
+// const columnMap = computed(()=> facilityStore.getColumnMap);  // 데이터별 컬럼명 매핑
+
+// const dataColumn = computed(() => {
+//   return columnMap.value[selectedFacName.value] || null;
+// });
+
+const dataColumn = computed(()=> facilityStore.dataColumn); // 데이터별 컬럼명 매핑
+
 const selectedGu = computed(() => facilityStore.getSelectedGu); // 선택된 구
 const selectedGeojson = ref({}) // 선택된 geojson
 
@@ -199,6 +208,7 @@ watch(selectedGu , (newVal)=>{
 // 필터 된 데이터 표출(검색) :: 지도이동시 모든 마커 표출됨
 watch(()=> facilityStore.getSearchData, (newVal) => {
   //console.log('NaverMap.vue :: watch :: getSearchData', newVal.length);
+  console.log('dataColumn', dataColumn.value);
   // 마커 초기화 로직
   mapCtrl.clearMarkers();
   if (newVal) {
@@ -206,9 +216,9 @@ watch(()=> facilityStore.getSearchData, (newVal) => {
     if(newVal.length > 0){
       //console.log('NaverMap.vue :: watch :: 시설명2', newVal);
       newVal.forEach(facility=>{
-        //console.log('NaverMap.vue :: watch :: 시설명3', facility);
+        //console.log('NaverMap.vue :: watch :: 시설명3', facility[column['xcnts'].val]);
 
-        const markerPosition = new naver.maps.LatLng(facility.xcnts, facility.ydnts); // 마커 위치 좌표
+        const markerPosition = new naver.maps.LatLng(facility[dataColumn.value['xcnts'].val], facility[dataColumn.value['ydnts'].val]); // 마커 위치 좌표
 
         /**
          * 마커생성
@@ -216,7 +226,7 @@ watch(()=> facilityStore.getSearchData, (newVal) => {
          * @param {string} title - 마커 제목
          * @param {object} data - 마커 데이터
          */
-        mapCtrl.addMarker(markerPosition,facility.lbrry_name,facility);
+        mapCtrl.addMarker(markerPosition,facility[dataColumn.value['facName'].val],facility);
       })
       mapCtrl.initClustering();
       //mapCtrl.addMarker(facilityStore.facilities[newVal]);

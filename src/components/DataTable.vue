@@ -29,7 +29,14 @@
                     <table id="datatablesSimple" class="datatable-table">
                         <thead>
                             <tr>
-                                <th :class="sortMap.lbrry_name" data-sortable="true" style="width: 19.479553903345725%;">
+                                <th v-for="(column,index) in Object.values(dataColumn).filter(column=> column.show == true)" :key="index"
+                                    :style="tableStyleMap[index]">
+                                    <a href="javascript.void(0);" 
+                                       :class="column.sort ? 'datatable-sorter' : ''"
+                                       :style="(!column.sort ? 'pointer-events: none;' : '') "
+                                       @click.prevent="column.sort && clickSort(Object.keys(dataColumn)[index])">{{ column.colName }}</a>
+                                </th>
+                                <!-- <th :class="sortMap.lbrry_name" data-sortable="true" style="width: 19.479553903345725%;">
                                     <a href="javascript.void(0);" 
                                        class="datatable-sorter"
                                        @click.prevent="clickSort('lbrry_name')">시설명</a>
@@ -47,18 +54,18 @@
                                 </th>
                                 <th data-sortable="true" style="width: 27%''">
                                     홈페이지 주소
-                                </th>
+                                </th> -->
                             </tr>
                         </thead>
                         <tbody v-if="pageDataList.length > 0">
                             <tr :class="data.lbrry_seq_no == selectedListData.lbrry_seq_no ? 'clicked' : '' " 
                                 @click.prevent="clickList(data)" 
                                 v-for="data in pageDataList" :key="data.lbrry_seq_no">
-                                <td>{{ data.lbrry_name }}</td>
-                                <td>{{ data.code_value }}</td>
-                                <td>{{ data.adres }}</td>
-                                <td>{{ data.tel_no }}</td>
-                                <td><a href="javascript:void(0);" @click="mapCtrl.openLink(data.FAC_URL)" class="datatable-link">{{ data.hmpg_url }}</a></td>
+                                <td>{{ data[dataColumn['facName'].val] }}</td>
+                                <td>{{ data[dataColumn['guCode'].val] }}</td>
+                                <td>{{ data[dataColumn['adress'].val] }}</td>
+                                <td>{{ data[dataColumn['tel'].val] }}</td>
+                                <td><a href="javascript:void(0);" @click="mapCtrl.openLink(data[dataColumn['hompage'].val])" class="datatable-link">{{ data[dataColumn['hompage'].val] }}</a></td>
                             </tr>
                         </tbody>
                         <tbody v-else>
@@ -138,6 +145,16 @@ const facilityStore = useFacilityStore(); // 시설정보 스토어
 // lnb선택 항목 + 시설정보 데이터
 const facName = computed(() => facilityStore.getFacName);
 const facData = computed(() => facilityStore.getFacilities); // getter 또는 상태
+const dataColumn = computed(()=> facilityStore.dataColumn); // 데이터별 컬럼명 매핑
+
+// 데이터리스트 스타일 맵(너비) :: 사용안함 (추후 삭제 예정)
+const tableStyleMap = {
+    0 : 'width: 19.479553903345725%',
+    1 : 'width: 8.401486988847584%;',
+    2 : 'width: 30.03717472118959%;',
+    3 : 'width: 15.092936802973977%;',
+    4 : 'width: 27%;',
+}
 
 // 검색 관련
 const searchKeyword = ref(''); // 검색어 입력값
@@ -148,6 +165,7 @@ const selectedListData = computed(()=> facilityStore.getSelectListData) // 클�
 const makeFacName = computed(()=> facilityStore.makeFacName);
 const selectedGu = computed(() => facilityStore.getSelectedGu); // 선택된 구코드
 
+
 // 정렬 관련
 // const sortMap = ref([
 //     { sort : 'normal' }, // 기본정렬
@@ -156,8 +174,8 @@ const selectedGu = computed(() => facilityStore.getSelectedGu); // 선택된 구
 // ]); 
 
 const sortMap = ref({
-    lbrry_name : 'normal',
-    code_value : 'normal',
+    facName : 'normal',
+    guCode : 'normal',
 });
 
 const sortIdx = ref(0); // 정렬 인덱스(초기값 :: sortMap[0] => normal)
@@ -208,14 +226,13 @@ function clickPage(page) {
 //   facName.value ? facName.value : '선택된 항목이 없습니다.'
 // );
 
-const facDataList = computed(() =>
+const facDataList = computed(() => 
   facName.value && facData.value[facName.value] ? facData.value[facName.value] : []
 );
 
 // 리스트 검색 + 정렬 옵션(구현중...)
 const optionDataList = computed(() => {
     let dataList = [...facDataList.value]; // 정렬관련 무한루프 이슈로 얕은복사로 초기값 지정
-
     currentPage.value = 1; // 검색시 페이지 초기화
 
     // 검색어가 있을 경우 ([기능보완필요] :: 검색어가 모두 입력된후 검색되게 기능 보완필요)
@@ -223,28 +240,28 @@ const optionDataList = computed(() => {
         //console.log('search.value', search.value);
         // 검색어 :: 도서관이름 / 주소 / 전화번호 / 홈페이지주소 / 구코드명
         dataList = dataList.filter(data => {
-            return (data.lbrry_name ?? '').toLowerCase().includes(search.value) || 
-                    (data.adres ?? '').toLowerCase().includes(search.value) ||
-                    (data.tel_no ?? '').toLowerCase().includes(search.value) ||
-                    (data.hmpg_url ?? '').toLowerCase().includes(search.value) ||
-                    (data.code_value ?? '').toLowerCase().includes(search.value);
+            return (data[dataColumn.value['facName'].val] ?? '').toLowerCase().includes(search.value) || 
+                    (data[dataColumn.value['adress'].val] ?? '').toLowerCase().includes(search.value) ||
+                    (data[dataColumn.value['tel'].val] ?? '').toLowerCase().includes(search.value) ||
+                    (data[dataColumn.value['hompage'].val] ?? '').toLowerCase().includes(search.value) ||
+                    (data[dataColumn.value['guCode'].val] ?? '').toLowerCase().includes(search.value);
         })
     }
 
     // 정렬
-    if (sortMap.value.lbrry_name === 'asc') {
-        dataList = dataList.sort((a, b) => a.lbrry_name.localeCompare(b.lbrry_name));
-    } else if (sortMap.value.lbrry_name === 'desc') {
-        dataList = dataList.sort((a, b) => b.lbrry_name.localeCompare(a.lbrry_name));
+    if (sortMap.value.facName === 'asc') {
+        dataList = dataList.sort((a, b) => a[dataColumn.value['facName'].val].localeCompare(b[dataColumn.value['facName'].val]));
+    } else if (sortMap.value.facName === 'desc') {
+        dataList = dataList.sort((a, b) => b[dataColumn.value['facName'].val].localeCompare(a[dataColumn.value['facName'].val]));
     }
 
-    if (sortMap.value.code_value === 'asc') {
-        dataList.sort((a, b) => a.code_value.localeCompare(b.code_value));
-    } else if (sortMap.value.code_value === 'desc') {
-        dataList.sort((a, b) => b.code_value.localeCompare(a.code_value));
+    if (sortMap.value.guCode === 'asc') {
+        dataList.sort((a, b) => a[dataColumn.value['guCode'].val].localeCompare(b[dataColumn.value['guCode'].val]));
+    } else if (sortMap.value.guCode === 'desc') {
+        dataList.sort((a, b) => b[dataColumn.value['guCode'].val].localeCompare(a[dataColumn.value['guCode'].val]));
     }
 
-    //console.log('filterDataList :: ', dataList);
+    console.log('filterDataList :: ', dataList);
     useFacilityStore().setSearchData(dataList); // 필터링된 데이터 저장
     return dataList;
 });
@@ -257,7 +274,7 @@ const pageDataList = computed(() => {
 
 // 정렬 클릭
 function clickSort(sortName) {
-    //console.log('clickSort', sortName , sortMap);
+    console.log('clickSort', sortName , sortMap);
     // 각 항목별 정렬 ( normal -> asc -> desc 반복)
     sortMap.value[sortName] 
         = sortMap.value[sortName] === 'normal' ? 'asc' : (sortMap.value[sortName] === 'asc' ? 'desc' : 'normal');

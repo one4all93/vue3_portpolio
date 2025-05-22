@@ -1,5 +1,5 @@
 <template>
-    <div id="layoutSidenav_nav">
+    <!-- <div id="layoutSidenav_nav"> -->
         <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
             <div class="sb-sidenav-menu">
                 <div class="nav">
@@ -14,17 +14,26 @@
                     </a>
                     <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
                         <nav class="sb-sidenav-menu-nested nav" v-for="(facName, index) in Object.keys(facilitys)" :key="index">
-                            <a :class="'nav-link ' + (selectedFacName == facName ? 'active' : '')" @click.prevent="clickLnb(facName)" href="javascript.void(0);">{{ facName }}</a>
+                            <a :class="'nav-link ' + ((selectedFacName == (menuNameMap[facName] || facName)) ? 'active' : '')" @click.prevent="clickLnb(facName)" href="javascript.void(0);">{{ menuNameMap[facName] || facName }}</a>
                         </nav>
                     </div>
             
                 </div>
             </div>
+
+            <!-- <div class="sb-sidenav-footer d-grid p-3">
+                <button @click="openAddPopup" class="btn btn-outline-light btn-sm w-100">
+                    + 데이터 항목 추가
+                </button>
+                <div class="small mt-2">custom by One4All93</div>
+            </div> -->
+            
             <div class="sb-sidenav-footer">
                 <div class="small"> custom by One4All93 </div>
+                sdadsadsa
             </div>
         </nav>
-    </div>
+    <!-- </div> -->
 </template>
 
 <script setup>    
@@ -35,8 +44,9 @@ import { useFacilityStore } from '@/stores/useFacilityStore';
 // const facilitys = defineProps({
 //   facilitys: Object // 또는 정확한 타입 명시 (예: Record<string, any> 또는 특정 타입)
 // })
-const { facilitys } = defineProps(['facilitys']);
-//console.log('Lnb component setup', Object.keys(facilitys));
+//const { facilitys } = defineProps(['facilitys']);
+
+const facilitys = computed(() => facilityStore.getFacilities); // 시설정보 스토어에서 데이터 가져오기
 
 const clickOn = ref(false); // 클릭 상태
 
@@ -53,6 +63,13 @@ function clickLnb(facName) {
         facilityStore.selectFacName(facName);
     }
 }
+
+const menuNameMap = {
+    'SeoulPublicLibraryInfo': '서울공공도서관',
+    'SearchParkInfoService': '서울공공체육시설',
+    'ListPublicReservationCulture': '서울시공원',
+};
+
 </script>
 
 <style>

@@ -1,10 +1,19 @@
 // NaverMapCtrl.js
-import { ref , watch } from 'vue';
+import { ref , watch , computed } from 'vue';
 import { useMapStore } from '@/stores/useMapStore';
 import { useFacilityStore } from '@/stores/useFacilityStore';
 
 export function useMapCtrl() {
   const facilityStore = useFacilityStore(); // 시설정보 스토어
+
+  // const selectedFacName = computed(() => facilityStore.getFacName); // 선택된 시설항목명
+  // const columnMap = computed(()=> facilityStore.getColumnMap);  // 데이터별 컬럼명 매핑
+
+  // const dataColumn = computed(() => {
+  //   return columnMap.value[selectedFacName.value] || null;
+  // });
+
+  const dataColumn = computed(()=> facilityStore.dataColumn); // 데이터별 컬럼명 매핑
 
   const mapStore = useMapStore(); // 지도
   const map = ref(null); // 지도 인스턴스
@@ -125,14 +134,14 @@ export function useMapCtrl() {
     });
 
     marker.data = data; // 마커에 데이터 추가
-
+    console.log('marker.data :: dataColumn', dataColumn.value);
     // 데이터셋 포맷형식 정리필요(여러데이터 들어와도 바로 사용가능하게) ***
     const content =[
       '<div class="marker-popup">',
-      '   <h3 class="title">[',data.code_value,'] ', data.lbrry_name ,'</h3>',
-      '   <p class="address"> 주소 : ', data.adres ,'<br />',
-      '   <p class="info"> 전화번호 : ', data.tel_no ,'<br />',
-      '       <a href="', data.hmpg_url , '" target="_blank">' , data.hmpg_url , '</a>',
+      '   <h3 class="title">[',data[dataColumn.value['guCode'].val],'] ', data[dataColumn.value['facName'].val] ,'</h3>',
+      '   <p class="address">' , dataColumn.value['adress'].colName , ' : ', data[dataColumn.value['adress'].val] ,'<br />',
+      '   <p class="info"> ' , dataColumn.value['tel'].colName , ' : ', data[dataColumn.value['tel'].val] ,'<br />',
+      '       <a href="', data[dataColumn.value['hompage'].val]  , '" target="_blank">' , data[dataColumn.value['hompage'].val]  , '</a>',
       '   </p>',
       '   <button class="close-btn">닫기</button>',
       '</div>'
