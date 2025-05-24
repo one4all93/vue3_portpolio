@@ -11,36 +11,29 @@ export const useFacilityStore = defineStore('facility', {
     selectMarker : [],
     selectedGu : null,
 
-    // 적재된 api 서비스 목록
-    serviceList : [
-      'ListPublicReservationCulture',
-      'SearchParkInfoService',
-      'SeoulPublicLibraryInfo'
-    ],
-
-    // 서비스 데이터항목명
+    // 적재된 api 서비스 데이터항목명
     menuNameMap : {
       'SeoulPublicLibraryInfo': '서울공공도서관',
-      'SearchParkInfoService': '서울공공체육시설',
+      'SearchParkInfoService': '서울시주요공원',
       'ListPublicReservationCulture': '서울시공원',
     },
 
-    // 데이터별 컬럼명 매핑
+    // 데이터별 컬럼명 매핑(서비스명으로 api조회 :: 여기에 서비스명과 컬럼정보 담아야함)
     columnMap : {
-      'ListPublicReservationCulture':{
-        'key': {colName : '키' , val : 'column1' , show : false},
-        'marker': {colName : '마커' , val : '/library.png' , show : false},
-        'facName': {colName : '시설명' , val : 'column4' , show : true , sort : true},
-        'guCode': {colName : '소속구' , val : 'column9' , show : true , sort : true},
-        'xcnts': {colName : 'x좌표' , val : 'column3' , show : false},
-        'ydnts': {colName : 'y좌표' , val : 'column2' , show : false},
-        'adress': {colName : '시설주소' , val : 'column6' , show : true},
-        'tel': {colName : '접수현황' , val : 'column7' , show : true},
-        'hompage': {colName : '홈페이지 주소' , val : 'column8' , show : true}
-      },
+      // 'ListPublicReservationCulture':{
+      //   'key': {colName : '키' , val : 'column1' , show : false},
+      //   'marker': {colName : '마커' , val : '/library.png' , show : false},
+      //   'facName': {colName : '시설명' , val : 'column4' , show : true , sort : true},
+      //   'guCode': {colName : '소속구' , val : 'column9' , show : true , sort : true},
+      //   'xcnts': {colName : 'x좌표' , val : 'column3' , show : false},
+      //   'ydnts': {colName : 'y좌표' , val : 'column2' , show : false},
+      //   'adress': {colName : '시설주소' , val : 'column6' , show : true},
+      //   'tel': {colName : '접수현황' , val : 'column7' , show : true},
+      //   'hompage': {colName : '홈페이지 주소' , val : 'column8' , show : true}
+      // },
       'SearchParkInfoService':{
         'key': {colName : '키' , val : 'column1' , show : false},
-        'marker': {colName : '마커' , val : '/library.png' , show : false},
+        'marker': {colName : '마커' , val : '/park.png' , show : false},
         'facName': {colName : '시설명' , val : 'column4' , show : true , sort : true},
         'guCode': {colName : '소속구' , val : 'column5' , show : true , sort : true},
         'xcnts': {colName : 'x좌표' , val : 'column3' , show : false},
@@ -92,6 +85,7 @@ export const useFacilityStore = defineStore('facility', {
   },
   getters: {
     getServiceList: (state) => state.serviceList,
+    getMenuNameMap: (state) => state.menuNameMap,
     getColumnMap: (state) => state.columnMap,
     getFacilities: (state) => state.facilities,
     getFacName: (state) => state.facName,
@@ -99,6 +93,10 @@ export const useFacilityStore = defineStore('facility', {
     getSelectListData: (state) => state.selectListData,
     getSelectMarker: (state) => state.selectMarker,
     getSelectedGu: (state) => state.selectedGu,
+
+    serviceList(state) {
+      return Object.keys(state.columnMap);
+    },
     
     // 데이터별 컬럼명 매핑
     dataColumn(state) {

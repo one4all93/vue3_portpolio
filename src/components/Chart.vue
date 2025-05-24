@@ -1,8 +1,6 @@
 <template>
     <canvas 
       id="myBarChart" 
-      width="1288" 
-      height="514" 
       style="display: block; height: 100%; width: 100%;" 
       class="chartjs-render-monitor" 
       ref="chart">

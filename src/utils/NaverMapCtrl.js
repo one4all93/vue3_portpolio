@@ -182,20 +182,44 @@ export function useMapCtrl() {
       window.lastClickedMarker = marker; // 현재 클릭된 마커 저장
 
       infoWindow.open(map.value, marker);
+      window.currentInfoWindow = infoWindow;
 
       // 닫기 버튼 클릭 이벤트
       const closeButton = document.querySelector('.close-btn');
-      if (closeButton) {
+      if (closeButton && !closeButton._listenerAdded) {
         closeButton.addEventListener('click', () => {
-          window.lastClickedMarker.setIcon({
-            url: '/marker/library.png', // 마커 이미지 URL
-            scaledSize: new naver.maps.Size(24, 35), // 마커 이미지 크기
-          });
+          if (window.lastClickedMarker) {
+            window.lastClickedMarker.setIcon({
+              url: '/marker' + dataColumn.value['marker'].val,
+              scaledSize: new naver.maps.Size(24, 35),
+            });
+            window.lastClickedMarker = null;
+          }
           infoWindow.close();
+          window.currentInfoWindow = null;
         });
+        closeButton._listenerAdded = true;
       }
-      
     });    
+
+    // 외부에서 닫기 이벤트를 처리하기 위해
+    if (!window._closeEventRegistered) {
+      window.addEventListener('close-marker-popup', () => {
+        if (window.currentInfoWindow) {
+          window.currentInfoWindow.close();
+          window.currentInfoWindow = null;
+        }
+        //console.log(Object.keys(dataColumn.value).length)
+        if (window.lastClickedMarker && Object.keys(dataColumn.value).length > 0) {
+          window.lastClickedMarker.setIcon({
+            url: '/marker' + dataColumn.value['marker'].val,
+            scaledSize: new naver.maps.Size(24, 35),
+          });
+          window.lastClickedMarker = null;
+        }
+      });
+      window._closeEventRegistered = true;
+    }
   }
 
   // function updateMarkers(searchData) {

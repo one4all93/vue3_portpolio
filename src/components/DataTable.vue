@@ -36,25 +36,6 @@
                                        :style="(!column.sort ? 'pointer-events: none;' : '') "
                                        @click.prevent="column.sort && clickSort(Object.keys(dataColumn)[index])">{{ column.colName }}</a>
                                 </th>
-                                <!-- <th :class="sortMap.lbrry_name" data-sortable="true" style="width: 19.479553903345725%;">
-                                    <a href="javascript.void(0);" 
-                                       class="datatable-sorter"
-                                       @click.prevent="clickSort('lbrry_name')">시설명</a>
-                                </th>
-                                <th :class="sortMap.code_value" data-sortable="true" style="width: 8.401486988847584%;">
-                                    <a href="javascript.void(0);" 
-                                       class="datatable-sorter"
-                                       @click.prevent="clickSort('code_value')">소속구</a>
-                                </th>
-                                <th data-sortable="true" style="width: 30.03717472118959%;">
-                                    시설주소
-                                </th>
-                                <th data-sortable="true" style="width: 15.092936802973977%;">
-                                    전화번호
-                                </th>
-                                <th data-sortable="true" style="width: 27%''">
-                                    홈페이지 주소
-                                </th> -->
                             </tr>
                         </thead>
                         <tbody v-if="pageDataList.length > 0">

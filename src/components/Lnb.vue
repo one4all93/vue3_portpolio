@@ -3,20 +3,24 @@
         <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
             <div class="sb-sidenav-menu">
                 <div class="nav">
+                    <div class="sb-sidenav-menu-heading">시설데이터</div>
 
-                    <a :class="'nav-link collapsed ' + (clickOn ? 'active' : '')" 
-                       href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" 
-                       aria-expanded="false" aria-controls="collapseLayouts"
-                       @click.prevent="clickOn = !clickOn">
-                        <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                        시설 항목
-                        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                    <a :class="'nav-link ' + ((selectedFacName == facName) ? 'active' : '')" 
+                       href="javascript.void(0);" @click.prevent="clickLnb(facName)"
+                       v-for="(facName, index) in Object.keys(facilitys)" :key="index"
+                       >
+                        <div class="sb-nav-link-icon">
+                            <!-- <i class="fas fa-tachometer-alt"></i> -->
+                            <!-- <i class="fas fa-regular fa-book"></i> -->
+                        </div>
+                        {{ menuNameMap[facName] || facName }}
                     </a>
-                    <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                        <nav class="sb-sidenav-menu-nested nav" v-for="(facName, index) in Object.keys(facilitys)" :key="index">
-                            <a :class="'nav-link ' + ((selectedFacName == (menuNameMap[facName] || facName)) ? 'active' : '')" @click.prevent="clickLnb(facName)" href="javascript.void(0);">{{ menuNameMap[facName] || facName }}</a>
-                        </nav>
-                    </div>
+
+                    <div class="sb-sidenav-menu-heading">도움말</div>
+                    <a class="nav-link" href="javascript.void(0);">
+                        <div class="sb-nav-link-icon"><i class="fas fa-solid fa-circle-info"></i></div>
+                        Help
+                    </a>
             
                 </div>
             </div>
@@ -62,6 +66,7 @@ function clickLnb(facName) {
         // 스토어에 값 업데이트
         facilityStore.selectFacName(facName);
     }
+    window.dispatchEvent(new CustomEvent('close-marker-popup')); // 마커 팝업 닫기
 }
 
 const menuNameMap = {
