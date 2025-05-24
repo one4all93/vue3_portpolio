@@ -35,13 +35,15 @@ const facilityStore = useFacilityStore();
 
 const facName = computed(() => facilityStore.getFacName); // 선택된 시설명
 const facData = computed(() => facilityStore.getFacilities); // 시설정보
-
+const dataColumn = computed(()=> facilityStore.dataColumn); // 데이터별 컬럼명 매핑
 const makeFacName = computed(()=> facilityStore.makeFacName); // 선택된 시설명
 
 // 차트 데이터 :: 라벨(x축)
 const labels = computed(() => {
     if(!facData.value[facName.value]) return;
-    return Array.from(new Set(facData.value[facName.value].map(facility => facility.code_value)));
+    // console.log('facData', facData.value[facName.value]);
+    // console.log('dataColumn',dataColumn.value);
+    return Array.from(new Set(facData.value[facName.value].map(facility => facility[dataColumn.value['guCode'].val])));
     //return facilityStore.getFacilities.map(facility => facility.facName);
 });
 
@@ -50,14 +52,16 @@ const datasets = computed(() => {
     if(!facData.value[facName.value]) return;
     // 갯수만 필요하다고 생각해서 갯수만 담아주는 방식으로 변경**
     const map = new Map();
-
+    //console.log('facData', facData.value[facName.value]);
+    //console.log("'dataColumn['guCode'].val' ", dataColumn.value['guCode'].val)
     facData.value[facName.value].forEach(facility => {
-        const guCode = facility.code_value; // 구 코드
+        const guCode = facility[dataColumn.value['guCode'].val]; // 구 코드
+        //console.log('guCode', guCode);
         map.set(guCode, (map.get(guCode) || 0) + 1); // 구 코드가 있으면 카운트를 증가시킴
     });
-
+    //console.log('map', map);
     const countsByGu = labels.value.map(label => map.get(label) || 0);
-
+    //console.log('countsByGu', countsByGu);
     return [{
         label: facName.value,
         data: countsByGu,

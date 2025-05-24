@@ -208,7 +208,7 @@ watch(selectedGu , (newVal)=>{
 // 필터 된 데이터 표출(검색) :: 지도이동시 모든 마커 표출됨
 watch(()=> facilityStore.getSearchData, (newVal) => {
   //console.log('NaverMap.vue :: watch :: getSearchData', newVal.length);
-  console.log('dataColumn', dataColumn.value);
+  //console.log('dataColumn', dataColumn.value);
   // 마커 초기화 로직
   mapCtrl.clearMarkers();
   if (newVal) {
@@ -242,10 +242,12 @@ watch(()=> facilityStore.getSelectListData , newVal => {
   //console.log('NaverMap.vue :: watch :: getSelectListData', newVal , markers);
   if(Object.keys(newVal).length > 0){
     // 트리거안에서 마커맵 필터 체이닝구조로 변경**(가독성)
+    console.log(dataColumn.value['key'].val , newVal[dataColumn.value['key'].val])
     naver.maps.Event.trigger(
-      markers.filter(marker => marker.data.lbrry_seq_no === newVal.lbrry_seq_no)[0],
+      markers.filter(marker => marker.data.column1 === newVal[dataColumn.value['key'].val])[0],
       'click'
     );
+
     // selectedMarker = markers.filter(marker => { 
     //   //console.log('NaverMap.vue :: watch :: selectedMarker', marker.data, newVal);
     //   return marker.data.lbrry_seq_no ==  newVal.lbrry_seq_no;

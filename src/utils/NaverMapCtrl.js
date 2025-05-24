@@ -128,13 +128,12 @@ export function useMapCtrl() {
       position,
       title,  
       icon: {
-        url: '/marker/library.png', // 마커 이미지 URL
+        url: '/marker' + dataColumn.value['marker'].val, // 마커 이미지 URL
         scaledSize: new naver.maps.Size(24, 35), // 마커 이미지 크기
       },
     });
 
     marker.data = data; // 마커에 데이터 추가
-    console.log('marker.data :: dataColumn', dataColumn.value);
     // 데이터셋 포맷형식 정리필요(여러데이터 들어와도 바로 사용가능하게) ***
     const content =[
       '<div class="marker-popup">',
@@ -162,21 +161,22 @@ export function useMapCtrl() {
     // 마커 클릭 이벤트
     naver.maps.Event.addListener(marker, 'click', () => {
       //alert('"' + marker.title + '" 마커가 클릭되었습니다!');
-      //console.log('marker click', marker);
+      console.log('marker click', marker.title);
       marker.setIcon({
-        url: '/marker/library.png', // 클릭 시 마커 이미지 URL
+        url: '/marker' + dataColumn.value['marker'].val, // 클릭 시 마커 이미지 URL
         scaledSize: new naver.maps.Size(34, 45), // 클릭 시 마커 이미지 크기
       });
 
       // 이전에 클릭된 마커의 아이콘을 원래대로 되돌리기
       if (window.lastClickedMarker && window.lastClickedMarker !== marker) {
         window.lastClickedMarker.setIcon({
-          url: '/marker/library.png', // 마커 이미지 URL
+          url: '/marker' + dataColumn.value['marker'].val, // 마커 이미지 URL
           scaledSize: new naver.maps.Size(24, 35), // 마커 이미지 크기
         });
       }
 
       //console.log('marker click', marker);
+
       // 클릭된 마커를 현재 클릭된 마커로 저장
       facilityStore.setSelectMarker(marker); // 선택된 마커 저장
       window.lastClickedMarker = marker; // 현재 클릭된 마커 저장

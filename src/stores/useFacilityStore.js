@@ -28,32 +28,31 @@ export const useFacilityStore = defineStore('facility', {
     // 데이터별 컬럼명 매핑
     columnMap : {
       'ListPublicReservationCulture':{
-        '시설명': {colName : '시설명' },
-        '주소': {colName : '시설명'},
-        '전화번호': {colName : '시설명'},
-        '운영시간': {colName : '시설명'},
-        '휴무일': {colName : '시설명'},
-        '위도': {colName : '시설명'},
-        '경도': {colName : '시설명'}
+        'key': {colName : '키' , val : 'column1' , show : false},
+        'marker': {colName : '마커' , val : '/library.png' , show : false},
+        'facName': {colName : '시설명' , val : 'column4' , show : true , sort : true},
+        'guCode': {colName : '소속구' , val : 'column9' , show : true , sort : true},
+        'xcnts': {colName : 'x좌표' , val : 'column3' , show : false},
+        'ydnts': {colName : 'y좌표' , val : 'column2' , show : false},
+        'adress': {colName : '시설주소' , val : 'column6' , show : true},
+        'tel': {colName : '접수현황' , val : 'column7' , show : true},
+        'hompage': {colName : '홈페이지 주소' , val : 'column8' , show : true}
       },
       'SearchParkInfoService':{
-        '시설명': 'PARK_NAME',
-        '주소': 'ADDRESS',
-        '전화번호': 'PHONE_NUMBER',
-        '운영시간': 'OPERATION_TIME',
-        '휴무일': 'HOLIDAY',
-        '위도': 'LATITUDE',
-        '경도': 'LONGITUDE'
+        'key': {colName : '키' , val : 'column1' , show : false},
+        'marker': {colName : '마커' , val : '/library.png' , show : false},
+        'facName': {colName : '시설명' , val : 'column4' , show : true , sort : true},
+        'guCode': {colName : '소속구' , val : 'column5' , show : true , sort : true},
+        'xcnts': {colName : 'x좌표' , val : 'column3' , show : false},
+        'ydnts': {colName : 'y좌표' , val : 'column2' , show : false},
+        'adress': {colName : '시설주소' , val : 'column6' , show : true},
+        'tel': {colName : '전화번호' , val : 'column7' , show : true},
+        'hompage': {colName : '홈페이지 주소' , val : 'column8' , show : true}
       },
       // 서울시 공공도서관 정보
       'SeoulPublicLibraryInfo':{
-        // 'column4': {colName : '시설명' , val : 'column4'},
-        // 'column2': {colName : 'x좌표' , val : 'column2'},
-        // 'column3': {colName : 'y좌표' , val : 'column3'},
-        // 'column5': {colName : '소속구' , val : 'column5'},
-        // 'column6': {colName : '시설주소' , val : 'column6'},
-        // 'column7': {colName : '전화번호' , val : 'column7'},
-        // 'column8': {colName : '홈페이지 주소' , val : 'column8'}
+        'key': {colName : '키' , val : 'column1' , show : false},
+        'marker': {colName : '마커' , val : '/library.png' , show : false},
         'facName': {colName : '시설명' , val : 'column4' , show : true , sort : true},
         'guCode': {colName : '소속구' , val : 'column5' , show : true , sort : true},
         'xcnts': {colName : 'x좌표' , val : 'column2' , show : false},
@@ -75,7 +74,7 @@ export const useFacilityStore = defineStore('facility', {
     setSearchData(data) {
       this.searchData = data;
     },
-    setSelectListData(data) {
+    setSelectListData(data) { 
       this.selectListData = data;
     },
     setSelectMarker(data) {

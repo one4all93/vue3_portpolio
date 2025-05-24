@@ -58,9 +58,9 @@
                             </tr>
                         </thead>
                         <tbody v-if="pageDataList.length > 0">
-                            <tr :class="data.lbrry_seq_no == selectedListData.lbrry_seq_no ? 'clicked' : '' " 
+                            <tr :class="data[dataColumn['key'].val] == selectedListData[dataColumn['key'].val] ? 'clicked' : '' " 
                                 @click.prevent="clickList(data)" 
-                                v-for="data in pageDataList" :key="data.lbrry_seq_no">
+                                v-for="data in pageDataList" :key="data[dataColumn['key'].val]">
                                 <td>{{ data[dataColumn['facName'].val] }}</td>
                                 <td>{{ data[dataColumn['guCode'].val] }}</td>
                                 <td>{{ data[dataColumn['adress'].val] }}</td>
@@ -261,7 +261,7 @@ const optionDataList = computed(() => {
         dataList.sort((a, b) => b[dataColumn.value['guCode'].val].localeCompare(a[dataColumn.value['guCode'].val]));
     }
 
-    console.log('filterDataList :: ', dataList);
+    //console.log('filterDataList :: ', dataList);
     useFacilityStore().setSearchData(dataList); // 필터링된 데이터 저장
     return dataList;
 });
@@ -283,9 +283,21 @@ function clickSort(sortName) {
 
 // 리스트 데이터 클릭
 function clickList(data) {
+    console.log('clickList', data);
     // 시설정보 스토어에 데이터 넘겨주기
     facilityStore.setSelectListData(data);
 }
+
+watch(() => facilityStore.getSelectListData, (newVal) => {
+    //console.log('DataTable.vue :: watch :: selectedListData', newVal);
+    if (Object.keys(newVal).length > 0) {
+        const selectedData = optionDataList.value.find(data => data[dataColumn.value['key'].val] === newVal[dataColumn.value['key'].val]);
+        if (selectedData) {
+            // 클릭한 마커의 데이터로 리스트 선택
+            facilityStore.setSelectListData(selectedData);
+        }
+    }
+});
 
 watch(selectedGu , (newVal)=>{
     searchKeyword.value = newVal; // 구코드 검색어로 설정
@@ -295,15 +307,28 @@ watch(selectedGu , (newVal)=>{
 // 클릭한 마커 정보
 watch(() => facilityStore.getSelectMarker, (newVal) => {
     if (Object.keys(newVal).length > 0) {
-        const selectedData = optionDataList.value.find(data => data.lbrry_seq_no === newVal.data.lbrry_seq_no);
+        //const selectedData = optionDataList.value.find(data => data[dataColumn.value['key'].val] === newVal.data[dataColumn.value['key'].val]);
+        //const dataIdx = optionDataList.value.indexOf(data => data[dataColumn.value['key'].val] == newVal.data[dataColumn.value['key'].val]);
+        const dataIdx = optionDataList.value.findIndex(data=>{
+            //console.log('dataIdx', data[dataColumn.value['key'].val] , newVal.data[dataColumn.value['key'].val]);
 
-        if (selectedData) {
-            // 클릭한 마커의 데이터로 리스트 선택
-            facilityStore.setSelectListData(selectedData);
-        }
+            return data[dataColumn.value['key'].val] == newVal.data[dataColumn.value['key'].val];
+        });
+
+        //console.log('watch :: selectedData', selectedData);
+        console.log('watch :: dataIdx', dataIdx);
+        //console.log('watch :: selectedData', optionDataList.value , selectedData[dataColumn.value['key'].val]);
+        // if (selectedData) {
+        //     // 클릭한 마커의 데이터로 리스트 선택
+        //     facilityStore.setSelectListData(selectedData);
+        // }
+
+        facilityStore.setSelectListData(newVal.data); // 클릭한 마커의 데이터로 리스트 선택
 
         // 클릭한 마커와 일치하는 데이터의 순서 확인
-        const dataIdx = optionDataList.value.indexOf(selectedData);
+        // const dataIdx = optionDataList.value.indexOf(data => data[dataColumn.value['key'].val] == selectedData[dataColumn.value['key'].val]);
+
+        //console.log('watch :: dataIdx', dataIdx);
 
         // 페이지 번호 계산
         const pageNumber = Math.floor(dataIdx / itemsPerPage.value) + 1; 
