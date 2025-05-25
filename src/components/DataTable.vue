@@ -1,13 +1,13 @@
 <template>
-    <div class="row">
-        <div class="col">
-            <div class="card"> 
-                <div class="card mb-4">
-                <div class="card-header">
+    <!-- <div class="row">
+        <div class="col"> -->
+            <div class="card h-50"> 
+                <div class="card ">
+                <!-- <div class="card-header">
                     <svg class="svg-inline--fa fa-table me-1" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="table" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M64 256V160H224v96H64zm0 64H224v96H64V320zm224 96V320H448v96H288zM448 256H288V160H448v96zM64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64z"></path></svg>
                     {{ makeFacName('list') }}
-                </div>
-                <div class="card-body">
+                </div> -->
+                <div class="card-body" style="width: 100%; height: 500px; overflow: auto;">
                     <div class="datatable-wrapper datatable-loading no-footer sortable searchable fixed-columns"><div class="datatable-top">
                     <div class="datatable-dropdown">
                     <label>
@@ -25,12 +25,12 @@
                     <input class="datatable-input" v-model="searchKeyword" placeholder="검색어를 입력해주세요.." type="search" title="Search within table" aria-controls="datatablesSimple">
                 </div>
                 </div>
-                <div class="datatable-container">
+                <div class="datatable-container" style="overflow-y: auto;">
                     <table id="datatablesSimple" class="datatable-table">
                         <thead>
                             <tr>
                                 <th v-for="(column,index) in Object.values(dataColumn).filter(column=> column.show == true)" :key="index"
-                                    :style="tableStyleMap[index]">
+                                    >
                                     <a href="javascript.void(0);" 
                                        :class="column.sort ? 'datatable-sorter' : ''"
                                        :style="(!column.sort ? 'pointer-events: none;' : '') "
@@ -105,8 +105,8 @@
         </div>
     </div>  
     </div>
-        </div>   
-    </div>  
+        <!-- </div>   
+    </div>   -->
 </template>
 
 <script setup>
@@ -129,13 +129,13 @@ const facData = computed(() => facilityStore.getFacilities); // getter 또는 �
 const dataColumn = computed(()=> facilityStore.dataColumn); // 데이터별 컬럼명 매핑
 
 // 데이터리스트 스타일 맵(너비) :: 사용안함 (추후 삭제 예정)
-const tableStyleMap = {
-    0 : 'width: 19.479553903345725%',
-    1 : 'width: 8.401486988847584%;',
-    2 : 'width: 30.03717472118959%;',
-    3 : 'width: 15.092936802973977%;',
-    4 : 'width: 27%;',
-}
+// const tableStyleMap = {
+//     0 : 'width: 20%',
+//     1 : 'width: 14%;',
+//     2 : 'width: 30%;',
+//     3 : 'width: 15%;',
+//     4 : 'width: 15%;',
+// }
 
 // 검색 관련
 const searchKeyword = ref(''); // 검색어 입력값
@@ -334,6 +334,43 @@ watch(
 </script>
 
 <style scoped>
+
+.datatable-container {
+  width: 100%;
+}
+
+.datatable-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+/* thead를 고정하고 */
+.datatable-table thead {
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+}
+
+/* tbody에만 스크롤을 넣기 */
+.datatable-table tbody {
+  display: block;
+  max-height: 300px; /* 원하는 높이 지정 */
+  overflow-y: auto;
+  width: 100%;
+}
+
+/* tbody 내부의 tr들도 block으로 맞추기 */
+.datatable-table tbody tr {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.h-50 {
+    height: 47% !important;
+}
+
 /* 데이터리스트 로우 클릭시 스타일 변경 */
 .clicked {
   background-color: #f0f0f0;

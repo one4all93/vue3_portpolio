@@ -58,6 +58,14 @@
           },
           y: {
             title: { display: true, text: ''},
+            ticks: {
+              color: '#333',
+              autoSkip: false,
+              maxRotation: 0,
+              font: {
+                size: 12
+              }
+            }
             //beginAtZero: true
           }
         },

@@ -1,5 +1,5 @@
 <template>
-    <div id="map" style="height: 150%; width: 100%;"></div> 
+    <div id="map" style="height: 100%; width: 100%;"></div> 
 </template>
 
 <script setup>
@@ -30,7 +30,7 @@ const selectedGeojson = ref({}) // 선택된 geojson
 const mapCtrl = useMapCtrl(); // 지도 컨트롤러
 
 const map = ref(null);
-const lat = ref(37.570713);
+const lat = ref(37.480713);
 const lng = ref(126.978190);
 const zoom = ref(12);
 
@@ -139,6 +139,16 @@ function drawGeojson(geojsonData) {
 
 // 지도 초기화 및 GeoJSON 로딩
 onMounted(() => {
+
+  // 모바일일때 지도값 설정 다르게
+  if (window.innerWidth < 768) {
+    // 모바일일 경우 다른 중심과 줌레벨 설정
+    //center.value = { lat: 37.5512, lng: 126.9882 }; // 예: 남산타워
+    lat.value = 37.5512;
+    lng.value = 126.9882;
+    zoom.value = 10;
+  }
+
   map.value = new naver.maps.Map('map', mapOptions.value);
   //console.log('NaverMap mounted map', map.value);
   // 스토어에 지도 저장

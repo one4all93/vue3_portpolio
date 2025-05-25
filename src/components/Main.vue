@@ -1,8 +1,8 @@
 <template>
-    <div class="container-fluid px-4">            
+    <div class="container-fluid">            
         <div class="row mb-4">
-            <div class="col-xl-8">
-                <div class="card relative" style="height: 80vh;">
+            <div class="col-xl-7">
+                <div class="card map-card">
                     <!-- NaverMap -->
                     <NaverMap class="w-100 h-100"/>
 
@@ -32,7 +32,7 @@
             <Charts />
         </div>
         <!-- DataList -->
-        <DataTable />           
+        <!-- <DataTable />            -->
     </div>
 </template>
 
@@ -51,5 +51,81 @@ const selectedFacName = computed(() => facilityStore.getFacName); // 선택된 �
 </script>
 
 <style>
+.map-card {
+  position: relative;
+  height: 95%; /* 데스크탑 기준 */
+  display: flex;
+  flex-direction: column;
+}
 
+/* 모바일 ~ 중형 디바이스에 대해 height 재지정 */
+@media (max-width: 576px) {
+  .map-card {
+    height: 250px;
+  }
+}
+
+@media (min-width: 577px) and (max-width: 768px) {
+  .map-card {
+    height: 300px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 992px) {
+  .map-card {
+    height: 350px;
+  }
+}
+
+@media (min-width: 993px) and (max-width: 1200px) {
+  .map-card {
+    height: 400px;
+  }
+}
+
+@media (min-width: 1201px) and (max-width: 1400px) {
+  .map-card {
+    height: 500px;
+  }
+}
+
+/* @media (max-width: 767px) {
+  .map-card {
+    height: 350px; 
+  }
+} */
+
+/* @media (max-width: 576px) {
+    .map-card {
+        height: 350px; 
+    }
+}
+@media (max-width: 768px) {
+    .map-card {
+        height: 350px; 
+    }
+}
+@media (max-width: 992px) {
+    .map-card {
+        height: 350px; 
+    }
+}
+@media (max-width: 1200px) {
+    .map-card {
+        height: 350px; 
+    }
+}
+@media (max-width: 1400px) {
+    .map-card {
+        height: 350px; 
+    }
+} */
+
+
+
+.row > * {
+    padding-right: 0;
+    padding-left: 0;
+    margin-top: var(--bs-gutter-y);
+}
 </style>
