@@ -29,12 +29,13 @@
                     <table id="datatablesSimple" class="datatable-table">
                         <thead>
                             <tr>
-                                <th v-for="(column,index) in Object.values(dataColumn).filter(column=> column.show == true)" :key="index"
+                                <th :class="sortMap[column] == 'asc' ? 'datatable-ascending' : (sortMap[column] == 'desc' ? 'datatable-descending' : '')" 
+                                    v-for="column in Object.keys(dataColumn).filter(column=> dataColumn[column].show == true)" :key="column"
                                     >
                                     <a href="javascript.void(0);" 
-                                       :class="column.sort ? 'datatable-sorter' : ''"
-                                       :style="(!column.sort ? 'pointer-events: none;' : '') "
-                                       @click.prevent="column.sort && clickSort(Object.keys(dataColumn)[index])">{{ column.colName }}</a>
+                                       :class="dataColumn[column].sort ? 'datatable-sorter' : ''"
+                                       :style="(!dataColumn[column].sort ? 'pointer-events: none;' : '') "
+                                       @click.prevent="dataColumn[column].sort && clickSort(column)">{{ dataColumn[column].colName }}</a>
                                 </th>
                             </tr>
                         </thead>
@@ -60,14 +61,7 @@
                     <div class="datatable-info"> {{ (itemsPerPage * currentPage) + ' / ' + optionDataList.length }} 개</div>
                     <nav class="datatable-pagination" v-if="pageDataList.length > 0">
                         <ul class="datatable-pagination-list" >
-                            <!-- <li 
-                                :class="'datatable-pagination-list-item datatable-hidden datatable-' + (currentPage == 1 ? 'disabled' : '' )">
-                                <a 
-                                    data-page="1" 
-                                    class="datatable-pagination-list-item-link" 
-                                    @click.prevent="clickPage(1)">‹‹
-                                </a>
-                            </li> -->
+
                             <li 
                                 :class="'datatable-pagination-list-item datatable-hidden datatable-' + (currentPage == 1 ? 'disabled' : '' )">
                                 <a 
@@ -81,7 +75,6 @@
                                 <a data-page="{{ page }}" class="datatable-pagination-list-item-link" @click.prevent="clickPage(page)">{{ page }}</a>
                             </li>
 
-                            
                             <li :class="'datatable-pagination-list-item datatable-hidden datatable-' + (currentPage == pageNumber.length ? 'disabled' : '' )">
                                 <a 
                                 data-page="{{ pageNumber.length }}" 
@@ -89,15 +82,6 @@
                                 @click.prevent="clickPage(currentPage+1)">›
                                 </a>
                             </li>
-                        
-                            <!-- <li :class="'datatable-pagination-list-item datatable-hidden datatable-' + (currentPage == pageNumber.length ? 'disabled' : '' )">
-                                <a 
-                                    data-page="{{ pageNumber.length }}" 
-                                    class="datatable-pagination-list-item-link"
-                                    @click.prevent="clickPage(pageNumber.length)">››
-                                </a>
-                            </li> -->
-
                         </ul>
                     </nav>
                 </div>
@@ -229,6 +213,8 @@ const optionDataList = computed(() => {
         })
     }
 
+    console.log('optionDataList :: sortMap', sortMap.value);
+
     // 정렬
     if (sortMap.value.facName === 'asc') {
         dataList = dataList.sort((a, b) => a[dataColumn.value['facName'].val].localeCompare(b[dataColumn.value['facName'].val]));
@@ -255,11 +241,12 @@ const pageDataList = computed(() => {
 
 // 정렬 클릭
 function clickSort(sortName) {
-    console.log('clickSort', sortName , sortMap);
+    console.log('clickSort', sortName , sortMap.value[sortName]);
     // 각 항목별 정렬 ( normal -> asc -> desc 반복)
     sortMap.value[sortName] 
         = sortMap.value[sortName] === 'normal' ? 'asc' : (sortMap.value[sortName] === 'asc' ? 'desc' : 'normal');
     //sortIdx.value = (sortIdx.value + 1) % sortMap.value.length; // 0, 1, 2 순환
+    console.log('sortMap', sortMap.value);
 }
 
 // 리스트 데이터 클릭
