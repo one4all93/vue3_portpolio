@@ -54,6 +54,8 @@ window.addEventListener('DOMContentLoaded', event => {
 
 // Toggle the side navigation
 const sidebarToggle = document.body.querySelector('#sidebarToggle');
+const sidebar = document.querySelector('.sb-sidenav');
+
 if (sidebarToggle) {
     // Uncomment Below to persist sidebar toggle between refreshes
     // if (localStorage.getItem('sb|sidebar-toggle') === 'true') {
@@ -62,11 +64,29 @@ if (sidebarToggle) {
     sidebarToggle.addEventListener('click', event => {
         event.preventDefault();
         document.body.classList.toggle('sb-sidenav-toggled');
-        localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
+        localStorage.setItem(
+            'sb|sidebar-toggle',
+            document.body.classList.contains('sb-sidenav-toggled')
+        );
     });
 }
 
+    // ✅ 바깥 클릭 시 사이드바 닫기
+    document.addEventListener('click', function (event) {
+        const isSidebarOpen = document.body.classList.contains('sb-sidenav-toggled');
+
+        // 사이드바 열려 있고, 클릭한 곳이 사이드바나 버튼이 아닌 경우
+        if (
+            isSidebarOpen &&
+            !sidebar.contains(event.target) &&
+            !sidebarToggle.contains(event.target)
+        ) {
+            document.body.classList.remove('sb-sidenav-toggled');
+            localStorage.setItem('sb|sidebar-toggle', false);
+        }
+    });
 });
+
 </script>
 
 <style>

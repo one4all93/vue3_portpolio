@@ -60,29 +60,37 @@
                 <div class="datatable-bottom">
                     <div class="datatable-info"> {{ (itemsPerPage * currentPage) + ' / ' + optionDataList.length }} 개</div>
                     <nav class="datatable-pagination" v-if="pageDataList.length > 0">
-                        <ul class="datatable-pagination-list" >
-
-                            <li 
-                                :class="'datatable-pagination-list-item datatable-hidden datatable-' + (currentPage == 1 ? 'disabled' : '' )">
-                                <a 
-                                    data-page="1" 
-                                    class="datatable-pagination-list-item-link" 
-                                    @click.prevent="clickPage(currentPage-1)">‹
-                                </a>
+                        
+                        <ul class="datatable-pagination-list">
+                            <li :class="'datatable-pagination-list-item ' + (currentPage === 1 ? 'disabled' : '')">
+                                <a class="datatable-pagination-list-item-link" @click.prevent="currentPage > 1 && clickPage(1)">«</a>
                             </li>
 
-                            <li :class="'datatable-pagination-list-item ' + (currentPage == page ? 'active' : '')" v-for="page in pageNumber" :key="page">
-                                <a data-page="{{ page }}" class="datatable-pagination-list-item-link" @click.prevent="clickPage(page)">{{ page }}</a>
+                            <li :class="'datatable-pagination-list-item ' + (currentPage === 1 ? 'disabled' : '')">
+                                <a class="datatable-pagination-list-item-link" @click.prevent="currentPage > 1 && clickPage(currentPage - 1)">‹</a>
                             </li>
 
-                            <li :class="'datatable-pagination-list-item datatable-hidden datatable-' + (currentPage == pageNumber.length ? 'disabled' : '' )">
-                                <a 
-                                data-page="{{ pageNumber.length }}" 
-                                class="datatable-pagination-list-item-link"
-                                @click.prevent="clickPage(currentPage+1)">›
-                                </a>
+                            <li
+                                v-for="(page, index) in pageNumber"
+                                :key="index"
+                                :class="'datatable-pagination-list-item ' + (currentPage === page ? 'active' : '') + (page === '...' ? ' disabled' : '')"
+                            >
+                                <a
+                                    class="datatable-pagination-list-item-link"
+                                    href="#"
+                                    @click.prevent="typeof page === 'number' && clickPage(page)"
+                                >{{ page }}</a>
+                            </li>
+
+                            <li :class="'datatable-pagination-list-item ' + (currentPage === totalPages ? 'disabled' : '')">
+                                <a class="datatable-pagination-list-item-link" @click.prevent="currentPage < totalPages && clickPage(currentPage + 1)">›</a>
+                            </li>
+
+                            <li :class="'datatable-pagination-list-item ' + (currentPage === totalPages ? 'disabled' : '')">
+                                <a class="datatable-pagination-list-item-link" @click.prevent="currentPage < totalPages && clickPage(totalPages)">»</a>
                             </li>
                         </ul>
+
                     </nav>
                 </div>
             </div>
@@ -149,6 +157,10 @@ const sortIdx = ref(0); // 정렬 인덱스(초기값 :: sortMap[0] => normal)
 const currentPage = ref(1);
 const itemsPerPage = ref(10);   // datatable-selector에서 값 바인딩
 
+const totalPages = computed(() => {
+    return Math.ceil(optionDataList.value.length / itemsPerPage.value);
+});
+
 // 리스트 갯수 설정
 const viewCount = ref([
     { value: 10, selected: true },
@@ -158,32 +170,53 @@ const viewCount = ref([
 
 // 페이지 번호 설정 (페이지 너무 많아서 간소화하게 수정)
 const pageNumber = computed(() => {
+    // 총 페이지 수 계산 (optionDataList의 길이(데이터 전체 갯수) / itemsPerPage 페이지당 표출 갯수)
     const pageCount = Math.ceil(optionDataList.value.length / itemsPerPage.value);
-    // const maxPages = 5; // 최대 페이지 버튼 수
+    // 페이지 갯수 (5개만 보이게)
+    const maxPages = 5;
+    // 현재 선택페이지
+    const current = currentPage.value;
+    // 페이지 번호 배열
+    let pages = [];
 
-    // if (pageCount <= maxPages) {
-    //     return Array.from({ length: pageCount }, (_, i) => i + 1);
-    // }
+    // 페이지가 maxPages 이하인 경우, 모든 페이지 다 보여주기 + return 
+    if (pageCount <= maxPages) {
+        // pageCount값 만큼의 배열을 만들고, 그안에 value : 빈값(_) 과 index : i(0부터 시작) 값을 넣어줌
+        return Array.from({ length: pageCount }, (_, i) => i + 1);
+    }
 
-    // const startPage = Math.max(currentPage.value - Math.floor(maxPages / 2), 1);
-    // const endPage = Math.min(startPage + maxPages - 1, pageCount);
-    
-    // let pages = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
-    // if (startPage > 1) pages.unshift('...');
-    // if (endPage < pageCount) pages.push('...');
-    
-    // return pages;
+    console.log('페이지 여러개 세팅')
 
-    //pageCount크기만큼의 배열을 만들고, 1(i+1)부터 pageCount까지의 숫자를 넣어준다.**
-    return Array.from({ length: pageCount }, (_, i) => i + 1);
+    // 현재 페이지를 기준으로 
+        // 시작 페이지
+        let startPage = Math.max(1, current - Math.floor(maxPages / 2));
+        // 끝 페이지
+        let endPage = startPage + maxPages - 1;
+
+    // 마지막페이지가 총페이지보다 크면 
+    if (endPage > pageCount) {
+        // 끝 페이지를 총 페이지로 설정(존재하지 않는 페이지를 바라보면 안되기떄문)
+        endPage = pageCount;
+        startPage = endPage - maxPages + 1;
+    }
+
+    // 시작 페이지가 1보다 크면 "..." 추가
+    if (startPage > 1) pages.push('...');
+    // 기존 페이지에 시작 페이지부터 끝 페이지까지의 페이지를 합쳐줌(concat)
+    pages = pages.concat(Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i));
+    // 끝 페이지가 총 페이지보다 작으면 "..." 추가
+    if (endPage < pageCount) pages.push('...');
+
+    return pages;
 });
+
 
 function clickPage(page) {
     if (page === '...') {
         return; // "..."은 클릭하지 않도록 처리
     }
     currentPage.value = page;
-    //console.log('clickPage', page);
+    console.log('clickPage', page);
 }
 
 // 리스트 표출 항목명 조합 후 리턴
