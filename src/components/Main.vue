@@ -22,8 +22,14 @@
                         pointer-events: auto;
                     "
                     >
-                    <div style="color: white; font-size: 1.25rem; font-weight: 600; text-align: center;">
+                    <!-- <div style="color: white; font-size: 1.25rem; font-weight: 600; text-align: center;">
                         먼저 좌측에서 시설 항목을 선택해주세요.
+                    </div> -->
+                    <div class="guide-text pc-only">
+                      먼저 좌측에서 시설 항목을 선택해주세요.
+                    </div>
+                    <div class="guide-text mobile-only">
+                      먼저 상단(☰ 메뉴)에서 시설 항목을 선택해주세요.
                     </div>
                     </div>
                 </div>
@@ -51,6 +57,32 @@ const selectedFacName = computed(() => facilityStore.getFacName); // 선택된 �
 </script>
 
 <style>
+
+.guide-text {
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 600;
+  text-align: center;
+  padding: 1rem;
+}
+
+/* PC 전용 (min-width 기준) */
+.pc-only {
+  display: block;
+}
+.mobile-only {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .pc-only {
+    display: none;
+  }
+  .mobile-only {
+    display: block;
+  }
+}
+
 .map-card {
   position: relative;
   height: 95%; /* 데스크탑 기준 */

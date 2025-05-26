@@ -47,7 +47,12 @@
                                 <td>{{ data[dataColumn['guCode'].val] }}</td>
                                 <td>{{ data[dataColumn['adress'].val] }}</td>
                                 <td>{{ data[dataColumn['tel'].val] }}</td>
-                                <td><a href="javascript:void(0);" @click="mapCtrl.openLink(data[dataColumn['hompage'].val])" class="datatable-link">{{ data[dataColumn['hompage'].val] }}</a></td>
+                                <td>
+                                    <a href="javascript:void(0);" 
+                                       style=" color: black; text-decoration: none;"
+                                       @click="mapCtrl.openLink(data[dataColumn['hompage'].val])" 
+                                       class="datatable-link">{{ data[dataColumn['hompage'].val] }}</a>
+                                </td>
                             </tr>
                         </tbody>
                         <tbody v-else>
@@ -394,7 +399,7 @@ watch(
 /* 데이터리스트 로우 클릭시 스타일 변경 */
 .clicked {
   background-color: #f0f0f0;
-  color: #1976d2; 
+  color: #1976d2 !important; 
   font-weight: bold;
 }
 </style>

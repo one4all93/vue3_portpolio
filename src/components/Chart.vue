@@ -37,11 +37,20 @@
       chartInstance.destroy(); // 기존 차트 제거
     }
   
+    const datasetsSafe = props.datasets ?? [];
+
     chartInstance = new Chart(chart.value, {
       type: props.type,
       data: {
         labels: props.labels,
-        datasets: props.datasets
+        //datasets: props.datasets,
+        datasets: datasetsSafe.map(dataset => ({
+          ...dataset,
+          borderRadius: Number.MAX_VALUE,
+          borderSkipped: false,
+          borderColor: 'rgba(54, 162, 235, 1)',
+          backgroundColor: 'rgba(30, 136, 229, 0.3)',
+        }))
       },
       options: {
         indexAxis: 'y', // x축을 수평으로
@@ -82,8 +91,8 @@
               //console.log('선택된 구코드 :: selectedGu', selectedGu);
               //console.log('새로운 데이터 클릭' , dataset);
               // 클릭된 항목만 색 변경
-              dataset.backgroundColor[index] = '#FF6384';
-              dataset.borderColor[index] = '#c2185b'; 
+              dataset.backgroundColor[index] = 'rgba(255, 99, 132, 0.5)';
+              dataset.borderColor[index] = 'rgba(194, 24, 91, 1)';
               //console.log('선택된 구코드', props.labels[index]);
               facilityStore.setSelectedGu(props.labels[index]); // 클릭한 구코드 저장
             }else if(selectedIndex.value != null && index == selectedIndex.value){
@@ -105,8 +114,10 @@
   // 차트 클릭 초기화 (클릭한 데이터)
   function initColor(dataset) {
     // 클릭된 데이터 색 초기화
-    dataset.backgroundColor = dataset.data.map(() => '#36A2EB');
-    dataset.borderColor = dataset.data.map(() => '#1e88e5');
+    dataset.backgroundColor = dataset.data.map(() => 'rgba(30, 136, 229, 0.3)');
+    dataset.borderColor = dataset.data.map(() => 'rgba(54, 162, 235, 1)');
+    // borderColor: 'rgba(54, 162, 235, 1)',
+    // backgroundColor: 'rgba(30, 136, 229, 0.5)',
   }
 
   // 데이터 없을때 사용
