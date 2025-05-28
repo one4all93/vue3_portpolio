@@ -40,7 +40,7 @@ export const useFacilityStore = defineStore('facility', {
         'ydnts': {colName : 'y좌표' , val : 'column2' , show : false},
         'adress': {colName : '시설주소' , val : 'column6' , show : true},
         'tel': {colName : '전화번호' , val : 'column7' , show : true},
-        'hompage': {colName : '홈페이지 주소' , val : 'column8' , show : true}
+        'hompage': {colName : '홈페이지' , val : 'column8' , show : true}
       },
       // 서울시 공공도서관 정보
       'SeoulPublicLibraryInfo':{

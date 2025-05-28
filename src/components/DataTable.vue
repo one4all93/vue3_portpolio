@@ -49,9 +49,9 @@
                                 <td>{{ data[dataColumn['tel'].val] }}</td>
                                 <td>
                                     <a href="javascript:void(0);" 
-                                       style=" color: black; text-decoration: none;"
                                        @click="mapCtrl.openLink(data[dataColumn['hompage'].val])" 
-                                       class="datatable-link">{{ data[dataColumn['hompage'].val] }}</a>
+                                        >{{ data[dataColumn['hompage'].val] }}
+                                    </a>
                                 </td>
                             </tr>
                         </tbody>
@@ -396,10 +396,18 @@ watch(
     height: 47% !important;
 }
 
+.datatable-link {
+  color: black;
+  text-decoration: none;
+}
+
 /* 데이터리스트 로우 클릭시 스타일 변경 */
 .clicked {
   background-color: #f0f0f0;
   color: #1976d2 !important; 
   font-weight: bold;
+  border: 2px solid #1976d2;
+  border-radius: 4px; /* 살짝 둥글게 */
+  padding: 2px 4px; /* 테두리 안쪽 여백 */
 }
 </style>

@@ -135,7 +135,7 @@ export function useMapCtrl() {
 
     marker.data = data; // 마커에 데이터 추가
     // 데이터셋 포맷형식 정리필요(여러데이터 들어와도 바로 사용가능하게) ***
-    const content =[
+    const content1 =[
       '<div class="marker-popup">',
       '   <h3 class="title">[',data[dataColumn.value['guCode'].val],'] ', data[dataColumn.value['facName'].val] ,'</h3>',
       '   <p class="address">' , dataColumn.value['adress'].colName , ' : ', data[dataColumn.value['adress'].val] ,'<br />',
@@ -146,9 +146,25 @@ export function useMapCtrl() {
       '</div>'
     ].join('');
 
+    const content = [
+      '<div class="custom-popup">',
+      '  <div class="popup-header">',
+      '    <strong class="popup-title">[',data[dataColumn.value['guCode'].val],'] ', data[dataColumn.value['facName'].val] ,'</strong>',
+      // '    <span class="popup-count">총 78개</span>',
+      '    <button class="popup-close-btn" title="닫기">&times;</button>',
+      '  </div>',
+      // '  <div class="popup-tab">,',dataColumn.value['adress'].colName,',</div>',
+      '  <div class="popup-content">',
+      '    <div class="popup-row"><span class="label">',dataColumn.value['adress'].colName,'<br />','</span><span class="value">',data[dataColumn.value['adress'].val],'</span></div>',
+      '    <div class="popup-row"><span class="label">',dataColumn.value['tel'].colName ,'</span><span class="value">',data[dataColumn.value['tel'].val],'</span></div>',
+      '    <div class="popup-row"><span class="label">',dataColumn.value['hompage'].colName,' </span><span class="value">',data[dataColumn.value['hompage'].val],'</span></div>',
+      '  </div>',
+      '</div>'
+    ].join('');
+
     const infoWindow = new naver.maps.InfoWindow({
       content: content,
-      maxWidth: 300,
+      // maxWidth: 300,
       backgroundColor: "#fff",
       borderColor: "#ccc",
       borderWidth: 1,
@@ -185,7 +201,7 @@ export function useMapCtrl() {
       window.currentInfoWindow = infoWindow;
 
       // 닫기 버튼 클릭 이벤트
-      const closeButton = document.querySelector('.close-btn');
+      const closeButton = document.querySelector('.popup-close-btn');
       if (closeButton && !closeButton._listenerAdded) {
         closeButton.addEventListener('click', () => {
           if (window.lastClickedMarker) {
