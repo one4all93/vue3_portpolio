@@ -33,7 +33,7 @@ export const useFacilityStore = defineStore('facility', {
       // },
       'SearchParkInfoService':{
         'key': {colName : '키' , val : 'column1' , show : false},
-        'marker': {colName : '마커' , val : '/park.png' , show : false},
+        'marker': {colName : '마커' , val : '/park' , show : false},
         'facName': {colName : '시설명' , val : 'column4' , show : true , sort : true},
         'guCode': {colName : '소속구' , val : 'column5' , show : true , sort : true},
         'xcnts': {colName : 'x좌표' , val : 'column3' , show : false},
@@ -45,7 +45,7 @@ export const useFacilityStore = defineStore('facility', {
       // 서울시 공공도서관 정보
       'SeoulPublicLibraryInfo':{
         'key': {colName : '키' , val : 'column1' , show : false},
-        'marker': {colName : '마커' , val : '/library.png' , show : false},
+        'marker': {colName : '마커' , val : '/library' , show : false},
         'facName': {colName : '시설명' , val : 'column4' , show : true , sort : true},
         'guCode': {colName : '소속구' , val : 'column5' , show : true , sort : true},
         'xcnts': {colName : 'x좌표' , val : 'column2' , show : false},

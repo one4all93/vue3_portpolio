@@ -64,21 +64,6 @@ export function useMapCtrl() {
     { immediate: true }
   );
 
-  // watch(
-  //   () => facilityStore.searchData,
-  //   (newData) => {
-  //     if (newData.length > 0) {
-  //       clearMarkers();
-  //       newData.forEach((data) => {
-  //         const position = new naver.maps.LatLng(data.latitude, data.longitude);
-  //         addMarker(position, data.lbrry_name, data);
-  //       });
-  //       initClustering();
-  //     }
-  //   },
-  //   { immediate: true }
-  // );
-
   function initMap(naverMapInstance) {
     map.value = naverMapInstance;
   }
@@ -117,7 +102,7 @@ export function useMapCtrl() {
   function clearMarkers() {
     markers.value.forEach(marker => marker.setMap(null));
     markers.value = [];
-  }
+  } 
 
   function addMarker(position, title , data) {
     if (!map.value) return;
@@ -128,23 +113,23 @@ export function useMapCtrl() {
       position,
       title,  
       icon: {
-        url: '/marker' + dataColumn.value['marker'].val, // 마커 이미지 URL
+        url: '/marker' + dataColumn.value['marker'].val + '.png', // 마커 이미지 URL
         scaledSize: new naver.maps.Size(24, 35), // 마커 이미지 크기
       },
     });
 
     marker.data = data; // 마커에 데이터 추가
     // 데이터셋 포맷형식 정리필요(여러데이터 들어와도 바로 사용가능하게) ***
-    const content1 =[
-      '<div class="marker-popup">',
-      '   <h3 class="title">[',data[dataColumn.value['guCode'].val],'] ', data[dataColumn.value['facName'].val] ,'</h3>',
-      '   <p class="address">' , dataColumn.value['adress'].colName , ' : ', data[dataColumn.value['adress'].val] ,'<br />',
-      '   <p class="info"> ' , dataColumn.value['tel'].colName , ' : ', data[dataColumn.value['tel'].val] ,'<br />',
-      '       <a href="', data[dataColumn.value['hompage'].val]  , '" target="_blank">' , data[dataColumn.value['hompage'].val]  , '</a>',
-      '   </p>',
-      '   <button class="close-btn">닫기</button>',
-      '</div>'
-    ].join('');
+    // const content1 =[
+    //   '<div class="marker-popup">',
+    //   '   <h3 class="title">[',data[dataColumn.value['guCode'].val],'] ', data[dataColumn.value['facName'].val] ,'</h3>',
+    //   '   <p class="address">' , dataColumn.value['adress'].colName , ' : ', data[dataColumn.value['adress'].val] ,'<br />',
+    //   '   <p class="info"> ' , dataColumn.value['tel'].colName , ' : ', data[dataColumn.value['tel'].val] ,'<br />',
+    //   '       <a href="', data[dataColumn.value['hompage'].val]  , '" target="_blank">' , data[dataColumn.value['hompage'].val]  , '</a>',
+    //   '   </p>',
+    //   '   <button class="close-btn">닫기</button>',
+    //   '</div>'
+    // ].join('');
 
     const content = [
       '<div class="custom-popup">',
@@ -177,16 +162,16 @@ export function useMapCtrl() {
     // 마커 클릭 이벤트
     naver.maps.Event.addListener(marker, 'click', () => {
       //alert('"' + marker.title + '" 마커가 클릭되었습니다!');
-      console.log('marker click', marker.title);
+      //console.log('marker click', marker.title , dataColumn.value['marker'].val + '_selected.png');
       marker.setIcon({
-        url: '/marker' + dataColumn.value['marker'].val, // 클릭 시 마커 이미지 URL
+        url: '/marker' + dataColumn.value['marker'].val + '_selected.png', // 클릭 시 마커 이미지 URL
         scaledSize: new naver.maps.Size(34, 45), // 클릭 시 마커 이미지 크기
       });
 
       // 이전에 클릭된 마커의 아이콘을 원래대로 되돌리기
       if (window.lastClickedMarker && window.lastClickedMarker !== marker) {
         window.lastClickedMarker.setIcon({
-          url: '/marker' + dataColumn.value['marker'].val, // 마커 이미지 URL
+          url: '/marker' + dataColumn.value['marker'].val + '.png', // 마커 이미지 URL
           scaledSize: new naver.maps.Size(24, 35), // 마커 이미지 크기
         });
       }
@@ -206,7 +191,7 @@ export function useMapCtrl() {
         closeButton.addEventListener('click', () => {
           if (window.lastClickedMarker) {
             window.lastClickedMarker.setIcon({
-              url: '/marker' + dataColumn.value['marker'].val,
+              url: '/marker' + dataColumn.value['marker'].val + '.png',
               scaledSize: new naver.maps.Size(24, 35),
             });
             window.lastClickedMarker = null;
@@ -228,7 +213,7 @@ export function useMapCtrl() {
         //console.log(Object.keys(dataColumn.value).length)
         if (window.lastClickedMarker && Object.keys(dataColumn.value).length > 0) {
           window.lastClickedMarker.setIcon({
-            url: '/marker' + dataColumn.value['marker'].val,
+            url: '/marker' + dataColumn.value['marker'].val + '.png',
             scaledSize: new naver.maps.Size(24, 35),
           });
           window.lastClickedMarker = null;
