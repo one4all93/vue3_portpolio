@@ -10860,6 +10860,13 @@ html, body {
   overflow: hidden;
 }
 
+@media (max-width: 1024px) {
+  #app {
+    overflow: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
 #layoutAuthentication {
   display: flex;
   flex-direction: column;

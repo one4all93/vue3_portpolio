@@ -22,10 +22,10 @@
                         Help
                     </a>
 
-                    <!-- <a class="nav-link" href="javascript.void(0);">
+                    <a class="nav-link" href="javascript.void(0);" @click.prevent="openAbout()">
                         <div class="sb-nav-link-icon"><i class="fas fa-solid fa-circle-info"></i></div>
                         About
-                    </a> -->
+                    </a>
             
                 </div>
             </div>
@@ -59,15 +59,12 @@ import { useFacilityStore } from '@/stores/useFacilityStore';
 import { emitter } from '@/utils/eventBus';
 
 function openIntro() {
-  emitter.emit('openIntro');
+    emitter.emit('openIntro');
 }
 
-// const introRef = ref(null);
-
-// function openIntro() {
-//   console.log('Lnb.vue :: openIntro()')
-//   introRef.value?.openIntro(); // intro.vue의 openIntro() 호출
-// }
+function openAbout() {
+    emitter.emit('openAbout');
+}
 
 const facilitys = computed(() => facilityStore.getFacilities); // 시설정보 스토어에서 데이터 가져오기
 
