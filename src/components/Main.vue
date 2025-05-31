@@ -85,7 +85,7 @@ const selectedFacName = computed(() => facilityStore.getFacName); // 선택된 �
 
 .map-card {
   position: relative;
-  height: 95%; /* 데스크탑 기준 */
+  height: 100%; /* 데스크탑 기준 */
   display: flex;
   flex-direction: column;
 }

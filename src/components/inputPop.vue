@@ -46,7 +46,7 @@
             </div>
 
             <h3>데이터 항목 매핑</h3>
-            1번 데이터고유키 / 2번 x좌표 / 3번 y좌표 / 4번 시설명 / 5번 구코드 (5개값은 고정**)
+            1번 데이터고유키 / 2번 y좌표 / 3번 x좌표 / 4번 시설명 / 5번 구코드 (5개값은 고정**)
             <div class="mapping-row" v-for="(item, index) in mappings" :key="index">
                 <input v-model="item.name" class="form-input" placeholder="항목명*" />
                 <input v-model="item.key" class="form-input" placeholder="설명" />

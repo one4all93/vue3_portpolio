@@ -17,10 +17,15 @@
                     </a>
 
                     <div class="sb-sidenav-menu-heading">도움말</div>
-                    <a class="nav-link" href="javascript.void(0);">
-                        <div class="sb-nav-link-icon"><i class="fas fa-solid fa-circle-info"></i></div>
+                    <a class="nav-link" href="javascript.void(0);" @click.prevent="openIntro()">
+                        <div class="sb-nav-link-icon"><i class="fa-solid fa-circle-question"></i></div>
                         Help
                     </a>
+
+                    <!-- <a class="nav-link" href="javascript.void(0);">
+                        <div class="sb-nav-link-icon"><i class="fas fa-solid fa-circle-info"></i></div>
+                        About
+                    </a> -->
             
                 </div>
             </div>
@@ -34,7 +39,6 @@
             
             <div class="sb-sidenav-footer">
                 <div class="small"> custom by One4All93 </div>
-                sdadsadsa
             </div>
         </nav>
     <!-- </div> -->
@@ -43,6 +47,8 @@
 <script setup>    
 import { computed, defineProps, ref } from 'vue';
 import { useFacilityStore } from '@/stores/useFacilityStore';
+// import mitt from 'mitt';
+// export const emitter = mitt();
 
 // props 정의
 // const facilitys = defineProps({
@@ -50,7 +56,23 @@ import { useFacilityStore } from '@/stores/useFacilityStore';
 // })
 //const { facilitys } = defineProps(['facilitys']);
 
+import { emitter } from '@/utils/eventBus';
+
+function openIntro() {
+  emitter.emit('openIntro');
+}
+
+// const introRef = ref(null);
+
+// function openIntro() {
+//   console.log('Lnb.vue :: openIntro()')
+//   introRef.value?.openIntro(); // intro.vue의 openIntro() 호출
+// }
+
 const facilitys = computed(() => facilityStore.getFacilities); // 시설정보 스토어에서 데이터 가져오기
+
+//const menuNameMap = facilityStore.getMenuNameMap; // 메뉴 이름 매핑 정보
+const menuNameMap = computed(() => facilityStore.getMenuNameMap); // 메뉴 이름 매핑 정보
 
 const clickOn = ref(false); // 클릭 상태
 
@@ -69,11 +91,11 @@ function clickLnb(facName) {
     window.dispatchEvent(new CustomEvent('close-marker-popup')); // 마커 팝업 닫기
 }
 
-const menuNameMap = {
-    'SeoulPublicLibraryInfo': '서울공공도서관',
-    'SearchParkInfoService': '서울공공체육시설',
-    'ListPublicReservationCulture': '서울시공원',
-};
+// const menuNameMap = {
+//     'SeoulPublicLibraryInfo': '서울공공도서관',
+//     'SearchParkInfoService': '서울공공체육시설',
+//     'ListPublicReservationCulture': '서울시공원',
+// };
 
 </script>
 

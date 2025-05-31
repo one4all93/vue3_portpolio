@@ -15,7 +15,7 @@ export const useFacilityStore = defineStore('facility', {
     menuNameMap : {
       'SeoulPublicLibraryInfo': '서울공공도서관',
       'SearchParkInfoService': '서울시주요공원',
-      'ListPublicReservationCulture': '서울시공원',
+      'SeoulDisableLibraryInfo': '서울장애인도서관',
     },
 
     // 데이터별 컬럼명 매핑(서비스명으로 api조회 :: 여기에 서비스명과 컬럼정보 담아야함)
@@ -31,6 +31,8 @@ export const useFacilityStore = defineStore('facility', {
       //   'tel': {colName : '접수현황' , val : 'column7' , show : true},
       //   'hompage': {colName : '홈페이지 주소' , val : 'column8' , show : true}
       // },
+
+      // 서울시 공원 정보
       'SearchParkInfoService':{
         'key': {colName : '키' , val : 'column1' , show : false},
         'marker': {colName : '마커' , val : '/park' , show : false},
@@ -53,7 +55,19 @@ export const useFacilityStore = defineStore('facility', {
         'adress': {colName : '시설주소' , val : 'column6' , show : true},
         'tel': {colName : '전화번호' , val : 'column7' , show : true},
         'hompage': {colName : '홈페이지 주소' , val : 'column8' , show : true}
-      }
+      },
+      // 서울시 장애인도서관 정보
+      'SeoulDisableLibraryInfo':{
+        'key': {colName : '키' , val : 'column1' , show : false},
+        'marker': {colName : '마커' , val : '/library2' , show : false},
+        'facName': {colName : '시설명' , val : 'column4' , show : true , sort : true},
+        'guCode': {colName : '소속구' , val : 'column5' , show : true , sort : true},
+        'xcnts': {colName : 'x좌표' , val : 'column3' , show : false},
+        'ydnts': {colName : 'y좌표' , val : 'column2' , show : false},
+        'adress': {colName : '시설주소' , val : 'column6' , show : true},
+        'tel': {colName : '전화번호' , val : 'column7' , show : true},
+        'hompage': {colName : '홈페이지' , val : 'column8' , show : true}
+      },
     },
   }),
   actions: {

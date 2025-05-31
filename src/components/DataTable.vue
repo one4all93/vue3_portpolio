@@ -62,9 +62,9 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="datatable-bottom">
+                <div class="datatable-bottom" v-if="pageDataList.length > 0">
                     <div class="datatable-info"> {{ (itemsPerPage * currentPage) + ' / ' + optionDataList.length }} 개</div>
-                    <nav class="datatable-pagination" v-if="pageDataList.length > 0">
+                    <nav class="datatable-pagination" style="align-content: center;">
                         
                         <ul class="datatable-pagination-list">
                             <li :class="'datatable-pagination-list-item ' + (currentPage === 1 ? 'disabled' : '')">
@@ -410,4 +410,5 @@ watch(
   border-radius: 4px; /* 살짝 둥글게 */
   padding: 2px 4px; /* 테두리 안쪽 여백 */
 }
+
 </style>

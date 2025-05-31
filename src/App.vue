@@ -1,6 +1,8 @@
 <template>
   <!-- <HelloWorld msg="Vite + Vue" /> -->
   <div class="sb-nav-fixed">
+    <!-- 안내페이지 -->
+    <Intro />
     <!-- TopMenu :: 상단 메뉴바 -->
     <TopMenu />
     <div id="layoutSidenav">  
@@ -27,6 +29,7 @@ import Lnb from '@/components/Lnb.vue';
 import Main from '@/components/Main.vue';
 import TopMenu from '@/components/TopMenu.vue';
 import InputPop from './components/inputPop.vue';
+import Intro from './components/intro.vue'; // 안내 페이지 컴포넌트
 
 import axios from 'axios';
 
