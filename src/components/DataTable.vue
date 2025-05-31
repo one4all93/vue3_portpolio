@@ -190,7 +190,7 @@ const pageNumber = computed(() => {
         return Array.from({ length: pageCount }, (_, i) => i + 1);
     }
 
-    console.log('페이지 여러개 세팅')
+    //console.log('페이지 여러개 세팅')
 
     // 현재 페이지를 기준으로 
         // 시작 페이지
@@ -221,7 +221,7 @@ function clickPage(page) {
         return; // "..."은 클릭하지 않도록 처리
     }
     currentPage.value = page;
-    console.log('clickPage', page);
+    //console.log('clickPage', page);
 }
 
 // 리스트 표출 항목명 조합 후 리턴
@@ -251,7 +251,7 @@ const optionDataList = computed(() => {
         })
     }
 
-    console.log('optionDataList :: sortMap', sortMap.value);
+    //console.log('optionDataList :: sortMap', sortMap.value);
 
     // 정렬
     if (sortMap.value.facName === 'asc') {
@@ -279,17 +279,17 @@ const pageDataList = computed(() => {
 
 // 정렬 클릭
 function clickSort(sortName) {
-    console.log('clickSort', sortName , sortMap.value[sortName]);
+    //console.log('clickSort', sortName , sortMap.value[sortName]);
     // 각 항목별 정렬 ( normal -> asc -> desc 반복)
     sortMap.value[sortName] 
         = sortMap.value[sortName] === 'normal' ? 'asc' : (sortMap.value[sortName] === 'asc' ? 'desc' : 'normal');
     //sortIdx.value = (sortIdx.value + 1) % sortMap.value.length; // 0, 1, 2 순환
-    console.log('sortMap', sortMap.value);
+    //console.log('sortMap', sortMap.value);
 }
 
 // 리스트 데이터 클릭
 function clickList(data) {
-    console.log('clickList', data);
+    //console.log('clickList', data);
     // 시설정보 스토어에 데이터 넘겨주기
     facilityStore.setSelectListData(data);
 }
@@ -322,7 +322,7 @@ watch(() => facilityStore.getSelectMarker, (newVal) => {
         });
 
         //console.log('watch :: selectedData', selectedData);
-        console.log('watch :: dataIdx', dataIdx);
+        //console.log('watch :: dataIdx', dataIdx);
         //console.log('watch :: selectedData', optionDataList.value , selectedData[dataColumn.value['key'].val]);
         // if (selectedData) {
         //     // 클릭한 마커의 데이터로 리스트 선택

@@ -252,7 +252,7 @@ watch(()=> facilityStore.getSelectListData , newVal => {
   //console.log('NaverMap.vue :: watch :: getSelectListData', newVal , markers);
   if(Object.keys(newVal).length > 0){
     // 트리거안에서 마커맵 필터 체이닝구조로 변경**(가독성)
-    console.log(dataColumn.value['key'].val , newVal[dataColumn.value['key'].val])
+    //console.log(dataColumn.value['key'].val , newVal[dataColumn.value['key'].val])
     naver.maps.Event.trigger(
       markers.filter(marker => marker.data.column1 === newVal[dataColumn.value['key'].val])[0],
       'click'

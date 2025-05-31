@@ -154,7 +154,7 @@ const saveMapping = async() => {
     try {
         const res = await axios.post('http://localhost:8080/api/fetchApi', payload);
         alert('전송 성공!');
-        console.log('응답:', res.data);
+        //console.log('응답:', res.data);
     } catch (err) {
         alert('전송 실패');
         console.error(err);

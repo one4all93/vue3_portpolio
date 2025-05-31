@@ -178,5 +178,16 @@ function close() {
   }
 }
 
+.intro-container .slide, .overlay .modal {
+  background: white;
+  border-radius: 16px;
+  padding: 1.5rem 2rem;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;      /* 화면보다 너무 크면 안 됨 */
+  overflow-y: auto;      /* 내부에서 스크롤 허용 */
+  box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+}
+
 
 </style>
