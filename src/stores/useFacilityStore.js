@@ -20,18 +20,6 @@ export const useFacilityStore = defineStore('facility', {
 
     // 데이터별 컬럼명 매핑(서비스명으로 api조회 :: 여기에 서비스명과 컬럼정보 담아야함)
     columnMap : {
-      // 'ListPublicReservationCulture':{
-      //   'key': {colName : '키' , val : 'column1' , show : false},
-      //   'marker': {colName : '마커' , val : '/library.png' , show : false},
-      //   'facName': {colName : '시설명' , val : 'column4' , show : true , sort : true},
-      //   'guCode': {colName : '소속구' , val : 'column9' , show : true , sort : true},
-      //   'xcnts': {colName : 'x좌표' , val : 'column3' , show : false},
-      //   'ydnts': {colName : 'y좌표' , val : 'column2' , show : false},
-      //   'adress': {colName : '시설주소' , val : 'column6' , show : true},
-      //   'tel': {colName : '접수현황' , val : 'column7' , show : true},
-      //   'hompage': {colName : '홈페이지 주소' , val : 'column8' , show : true}
-      // },
-
       // 서울시 공원 정보
       'SearchParkInfoService':{
         'key': {colName : '키' , val : 'column1' , show : false},

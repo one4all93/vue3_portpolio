@@ -107,7 +107,7 @@ export function useMapCtrl() {
   function addMarker(position, title , data) {
     if (!map.value) return;
     // 마커 생성
-    //console.log('addMarker', position, title , map.value);
+
     const marker = new naver.maps.Marker({
       map: map.value,
       position,
@@ -119,26 +119,13 @@ export function useMapCtrl() {
     });
 
     marker.data = data; // 마커에 데이터 추가
-    // 데이터셋 포맷형식 정리필요(여러데이터 들어와도 바로 사용가능하게) ***
-    // const content1 =[
-    //   '<div class="marker-popup">',
-    //   '   <h3 class="title">[',data[dataColumn.value['guCode'].val],'] ', data[dataColumn.value['facName'].val] ,'</h3>',
-    //   '   <p class="address">' , dataColumn.value['adress'].colName , ' : ', data[dataColumn.value['adress'].val] ,'<br />',
-    //   '   <p class="info"> ' , dataColumn.value['tel'].colName , ' : ', data[dataColumn.value['tel'].val] ,'<br />',
-    //   '       <a href="', data[dataColumn.value['hompage'].val]  , '" target="_blank">' , data[dataColumn.value['hompage'].val]  , '</a>',
-    //   '   </p>',
-    //   '   <button class="close-btn">닫기</button>',
-    //   '</div>'
-    // ].join('');
 
     const content = [
       '<div class="custom-popup">',
       '  <div class="popup-header">',
       '    <strong class="popup-title">[',data[dataColumn.value['guCode'].val],'] ', data[dataColumn.value['facName'].val] ,'</strong>',
-      // '    <span class="popup-count">총 78개</span>',
       '    <button class="popup-close-btn" title="닫기">&times;</button>',
       '  </div>',
-      // '  <div class="popup-tab">,',dataColumn.value['adress'].colName,',</div>',
       '  <div class="popup-content">',
       '    <div class="popup-row"><span class="label">',dataColumn.value['adress'].colName,'<br />','</span><span class="value">',data[dataColumn.value['adress'].val],'</span></div>',
       '    <div class="popup-row"><span class="label">',dataColumn.value['tel'].colName ,'</span><span class="value">',data[dataColumn.value['tel'].val],'</span></div>',

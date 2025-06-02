@@ -233,14 +233,13 @@ const facDataList = computed(() =>
   facName.value && facData.value[facName.value] ? facData.value[facName.value] : []
 );
 
-// 리스트 검색 + 정렬 옵션(구현중...)
+// 리스트 검색 + 정렬 옵션
 const optionDataList = computed(() => {
     let dataList = [...facDataList.value]; // 정렬관련 무한루프 이슈로 얕은복사로 초기값 지정
     currentPage.value = 1; // 검색시 페이지 초기화
 
     // 검색어가 있을 경우 ([기능보완필요] :: 검색어가 모두 입력된후 검색되게 기능 보완필요)
     if (search.value) {
-        //console.log('search.value', search.value);
         // 검색어 :: 도서관이름 / 주소 / 전화번호 / 홈페이지주소 / 구코드명
         dataList = dataList.filter(data => {
             return (data[dataColumn.value['facName'].val] ?? '').toLowerCase().includes(search.value) || 
@@ -250,8 +249,6 @@ const optionDataList = computed(() => {
                     (data[dataColumn.value['guCode'].val] ?? '').toLowerCase().includes(search.value);
         })
     }
-
-    //console.log('optionDataList :: sortMap', sortMap.value);
 
     // 정렬
     if (sortMap.value.facName === 'asc') {
@@ -266,7 +263,6 @@ const optionDataList = computed(() => {
         dataList.sort((a, b) => b[dataColumn.value['guCode'].val].localeCompare(a[dataColumn.value['guCode'].val]));
     }
 
-    //console.log('filterDataList :: ', dataList);
     useFacilityStore().setSearchData(dataList); // 필터링된 데이터 저장
     return dataList;
 });
